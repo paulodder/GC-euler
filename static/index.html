@@ -32,32 +32,32 @@
           arbitrary within reason, we developed this tool to allow researchers
           to visualise the effects of setting different cut-off criteria.
         </p>
-        <!-- <p> -->
-        <!--   The venn diagram below shows the overlap between the genes in the -->
-        <!--   current selection with previously identified potential cancer-testis -->
-        <!--   genes. -->
-        <!-- </p> -->
-        <!-- <p style="font-size: 120%;"> -->
-        <!--   The <span id="current_selection"><b>current selection</b></span> is -->
-        <!--   the set of genes that are currently selected in the<br /> -->
-        <!--   <span id="operator_statement" -->
-        <!--     >(<span id="check_hpgc">Human PGC</span> -->
-        <!--     <select -->
-        <!--       ><option>OR</option -->
-        <!--       ><option>AND</option></select -->
-        <!--     > -->
-        <!--     <span id="check_pgclc">PGC-like cell</span> histogram) -->
-        <!--   </span> -->
-        <!--   <select -->
-        <!--     ><option>AND</option -->
-        <!--     ><option>OR</option></select -->
-        <!--   > -->
-        <!--   <span id="check_gtex"> the GTEx</span> histogram -->
-        <!--   <select -->
-        <!--     ><option>AND</option -->
-        <!--     ><option>OR</option></select -->
-        <!--   ><span id="check_tcga"> the TCGA </span>histogram -->
-        <!-- </p> -->
+        <p>
+          The venn diagram below shows the overlap between the genes in the
+          current selection with previously identified potential cancer-testis
+          genes.
+        </p>
+        <p style="font-size: 120%;">
+          The <span id="current_selection"><b>current selection</b></span> is
+          the set of genes that are currently selected in the<br />
+          <span id="operator_statement"
+            >(<span id="check_hpgc">Human PGC</span>
+            <select
+              ><option>OR</option
+              ><option>AND</option></select
+            >
+            <span id="check_pgclc">PGC-like cell</span> histogram)
+          </span>
+          <select
+            ><option>AND</option
+            ><option>OR</option></select
+          >
+          <span id="check_gtex"> the GTEx</span> histogram
+          <select
+            ><option>AND</option
+            ><option>OR</option></select
+          ><span id="check_tcga"> the TCGA </span>histogram
+        </p>
         <div id="vennwrapper">
           <div id="venn" class="clickables">
             <button id="saveVenn">Export as png</button>
@@ -125,6 +125,15 @@
           >Paul Lodder</a
         >
       </p>
+      <p>
+        Concept by
+        <a
+          id="paullink"
+          target="_blank"
+          href="https://www.researchgate.net/profile/Jan_Willem_Bruggeman"
+          >Jan Willem Bruggeman</a
+        >
+      </p>
     </footer>
   </div>
 </body>
@@ -153,7 +162,7 @@
   <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 
   <script type="text/javascript" src="altered_modules/venn.js"></script>
-  <script type="text/javascript" src="altered_modules/sylvester.js"></script>
+  <!-- <script type="text/javascript" src="altered_modules/sylvester.js"></script> -->
   <script type="text/javascript" src="js/index.js"></script>
 
   <!-- <\!-- For export to png  purposes -\-> -->
