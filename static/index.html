@@ -3,38 +3,80 @@
   <div id="bodywrapper">
     <div id="main">
       <div id="leftbox">
-        <h3>Interactive Venn diagram for genes expressed in germ cells and cancer</h3>
+        <h3>
+          Interactive Venn diagram for genes expressed in germ cells and cancer
+        </h3>
         <p>
-          Germ cell / Cancer (GC) genes or antigens entail a subset of genes highly expressed in cancerous tissues, but whose expression is normally restricted to germ cells. Under physiological conditions these genes are solely expressed in immunologically privileged sites, preventing development of tolerance by the immune system. In combination with limited side effects when targeted, these features render GC-genes as ideal therapeutic targets in cancer therapy.
+          Germ cell / Cancer (GC) genes or antigens entail a subset of genes
+          highly expressed in cancerous tissues, but whose expression is
+          normally restricted to germ cells. Under physiological conditions
+          these genes are solely expressed in immunologically privileged sites,
+          preventing development of tolerance by the immune system. In
+          combination with limited side effects when targeted, these features
+          render GC-genes as ideal therapeutic targets in cancer therapy.
         </p>
         <p>
-          However, identification of GC-genes (or cancer/testis (CT) genes) has been based on gene expression in whole testicular tissue, rather than germ cells specifically. Most likely, the relative lack of success of CT-gene based therapies can be attributed to these criteria.</p>
-        This website is a supplement to our paper entitled "<a href="https://www.biorxiv.org/content/early/2017/09/28/195305" id="intextlink" target="_blank">Massive expression of germ cell specific genes is a hallmark of cancer and a potential target for novel treatment development</a>". Because the cut-offs we chose for the inclusion of GC-genes are arbitrary within reason, we developed this tool to allow researchers to visualise the effects of setting different cut-off criteria.
+          However, identification of GC-genes (or cancer/testis (CT) genes) has
+          been based on gene expression in whole testicular tissue, rather than
+          germ cells specifically. Most likely, the relative lack of success of
+          CT-gene based therapies can be attributed to these criteria.
         </p>
         <p>
-          We here integrated the interaction between figure 2 (Venn diagram) and supplementary figure 1 (expression distributions per dataset) into a web-based application.
+          This website is a supplement to our paper entitled "<a
+            href="https://www.biorxiv.org/content/early/2017/09/28/195305"
+            id="intextlink"
+            target="_blank"
+            >Massive expression of germ cell specific genes is a hallmark of
+            cancer and a potential target for novel treatment development</a
+          >". Because the cut-offs we chose for the inclusion of GC-genes are
+          arbitrary within reason, we developed this tool to allow researchers
+          to visualise the effects of setting different cut-off criteria.
         </p>
+        <!-- <p> -->
+        <!--   The venn diagram below shows the overlap between the genes in the -->
+        <!--   current selection with previously identified potential cancer-testis -->
+        <!--   genes. -->
+        <!-- </p> -->
+        <!-- <p style="font-size: 120%;"> -->
+        <!--   The <span id="current_selection"><b>current selection</b></span> is -->
+        <!--   the set of genes that are currently selected in the<br /> -->
+        <!--   <span id="operator_statement" -->
+        <!--     >(<span id="check_hpgc">Human PGC</span> -->
+        <!--     <select -->
+        <!--       ><option>OR</option -->
+        <!--       ><option>AND</option></select -->
+        <!--     > -->
+        <!--     <span id="check_pgclc">PGC-like cell</span> histogram) -->
+        <!--   </span> -->
+        <!--   <select -->
+        <!--     ><option>AND</option -->
+        <!--     ><option>OR</option></select -->
+        <!--   > -->
+        <!--   <span id="check_gtex"> the GTEx</span> histogram -->
+        <!--   <select -->
+        <!--     ><option>AND</option -->
+        <!--     ><option>OR</option></select -->
+        <!--   ><span id="check_tcga"> the TCGA </span>histogram -->
+        <!-- </p> -->
         <div id="vennwrapper">
           <div id="venn" class="clickables">
             <button id="saveVenn">Export as png</button>
           </div>
           <div id="venndisclaimer">
             <p>
-              Disclaimer: The actual overlap between genes may be larger than visualized here because gene names are subject to change, and different names for the same gene may have been used.</p>
+              Disclaimer: The actual overlap between genes may be larger than
+              visualized here because gene names are subject to change, and
+              different names for the same gene may have been used.
+            </p>
           </div>
         </div>
       </div>
-
-
     </div>
 
-
     <div id="rightbox">
-
       <div class="clickables" id="dlreset">
         <button id="reset_original">Reset default selection criteria</button>
-        <button id="downloadCurSel">Download current selection (CSV) </button>
-
+        <button id="downloadCurSel">Download current selection (CSV)</button>
       </div>
       <div id="chartwrapper">
         <!-- <div id="div_chart_jan" class="chart_div">
@@ -62,7 +104,6 @@
 
              </div> -->
 
-
         <!-- <div id="div_chart_tcgan" class="chart_div">
              <svg class="chart" id="expr_tcgan"></svg>
              <div class="chart_status">
@@ -75,14 +116,15 @@
 
              </div> -->
       </div>
-
-
-
     </div>
 
     <footer>
-      <p>Web app developed and designed by <a id="paullink" target="_blank" href="http://www.paul-lodder.nl">Paul Lodder</a></p>
-      <p>Concept by <a id="paullink" target="_blank" href="https://www.researchgate.net/profile/Jan_Willem_Bruggeman">Jan Willem Bruggeman</a></p>
+      <p>
+        Web app developed and designed by
+        <a id="paullink" target="_blank" href="http://www.paul-lodder.nl"
+          >Paul Lodder</a
+        >
+      </p>
     </footer>
   </div>
 </body>
@@ -92,31 +134,35 @@
        <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
 
        <!-- <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet"> -->
-  <link type="text/css" href="css/index.css " rel="stylesheet">
+  <link type="text/css" href="css/index.css " rel="stylesheet" />
   <script type="text/javascript" src="https://d3js.org/d3.v4.js"></script>
-  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/numjs/0.16.0/numjs.min.js"></script>
+  <script
+    type="text/javascript"
+    src="https://cdnjs.cloudflare.com/ajax/libs/numjs/0.16.0/numjs.min.js"
+  ></script>
 
-  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/numjs/0.16.0/numjs.min.js"></script>
-  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/6.6.4/math.min.js"></script>
-
+  <script
+    type="text/javascript"
+    src="https://cdnjs.cloudflare.com/ajax/libs/numjs/0.16.0/numjs.min.js"
+  ></script>
+  <script
+    type="text/javascript"
+    src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/6.6.4/math.min.js"
+  ></script>
 
   <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-
 
   <script type="text/javascript" src="altered_modules/venn.js"></script>
   <script type="text/javascript" src="altered_modules/sylvester.js"></script>
   <script type="text/javascript" src="js/index.js"></script>
 
-
   <!-- <\!-- For export to png  purposes -\-> -->
   <script src="https://cdn.rawgit.com/eligrey/canvas-toBlob.js/f1a01896135ab378aa5c0118eadd81da55e698d8/canvas-toBlob.js"></script>
   <script src="https://cdn.rawgit.com/eligrey/FileSaver.js/e9d941381475b5df8b7d7691013401e171014e89/FileSaver.min.js"></script>
-
 
   <!-- local -->
 
   <!-- <script type="text/javascript" src="{% static "node_modules/jquery/dist/jquery.min.js" %}"></script> -->
 
   <!-- <script type="text/javascript" src="{% static "node_modules/venn.js/build/venn.min.js" %}"></script> -->
-
 </head>
