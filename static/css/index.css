@@ -1,227 +1,232 @@
-footer {
-    margin-bottom: 0;
-    width: 100%;
-    heigth: 60px;
-    overflow-y: hidden;
-}
-/* @variables color { */
-/*     jan: #D3CC44; */
-/*     gtex: #76C25B; */
-/*     tcga: #B35A5A; */
-/* } */
+#chart_gtex > * {
+  transition: opacity, filter 0.3s cubic-bezier(0.33, 1, 0.68, 1); }
 
+#venn_statement_gtex {
+  background: rgba(118, 194, 91, 0.25); }
+
+#nofgenes_gtex {
+  text-decoration-color: #76c25b; }
+
+#line_gtex {
+  fill: none;
+  stroke: #76c25b;
+  stroke-width: 2; }
+
+#area_gtex {
+  fill: #76c25b;
+  stroke-width: 0; }
+
+#chart_tcga > * {
+  transition: opacity, filter 0.3s cubic-bezier(0.33, 1, 0.68, 1); }
+
+#venn_statement_tcga {
+  background: rgba(179, 90, 90, 0.25); }
+
+#nofgenes_tcga {
+  text-decoration-color: #b35a5a; }
+
+#line_tcga {
+  fill: none;
+  stroke: #b35a5a;
+  stroke-width: 2; }
+
+#area_tcga {
+  fill: #b35a5a;
+  stroke-width: 0; }
+
+#chart_hpgc > * {
+  transition: opacity, filter 0.3s cubic-bezier(0.33, 1, 0.68, 1); }
+
+#venn_statement_hpgc {
+  background: rgba(31, 120, 180, 0.25); }
+
+#nofgenes_hpgc {
+  text-decoration-color: #1f78b4; }
+
+#line_hpgc {
+  fill: none;
+  stroke: #1f78b4;
+  stroke-width: 2; }
+
+#area_hpgc {
+  fill: #1f78b4;
+  stroke-width: 0; }
+
+#chart_pgclc > * {
+  transition: opacity, filter 0.3s cubic-bezier(0.33, 1, 0.68, 1); }
+
+#venn_statement_pgclc {
+  background: rgba(166, 206, 227, 0.25); }
+
+#nofgenes_pgclc {
+  text-decoration-color: #a6cee3; }
+
+#line_pgclc {
+  fill: none;
+  stroke: #a6cee3;
+  stroke-width: 2; }
+
+#area_pgclc {
+  fill: #a6cee3;
+  stroke-width: 0; }
+
+#venn_statement_current_selection {
+  background: rgba(106, 61, 154, 0.25); }
+
+footer {
+  margin-bottom: 0;
+  width: 100%;
+  heigth: 60px;
+  overflow-y: hidden; }
 
 body {
-    overflow: auto;
-}
-#bodywrapper {
-    transform: scale(0.67);
-    transform-origin: 0 0;
-    width: 1800px;
-    height: auto;
+  overflow: auto; }
 
-}
+#bodywrapper {
+  transform: scale(0.67);
+  transform-origin: 0 0;
+  width: 1800px;
+  height: auto; }
+
 #leftbox {
-    float: left;
-    width: 750px;
-}
+  float: left;
+  width: 750px; }
 
 #venn {
-    float: left;
-    width: 1000;
-    height: 1000;
-}
+  float: left;
+  width: 1000;
+  height: 1000; }
+
 #venn svg {
-    float: left;
-}
+  float: left; }
 
 .chart_div {
-    float: right;
-    width: 750px;
-}
-
-
+  float: right;
+  /* transition: transform 0.6s cubic-bezier(0.33, 1, 0.68, 1); */
+  width: 750px; }
 
 [crossed-out="true"] {
-    text-decoration: line-through;
-    opacity: 0.5;
-}
+  text-decoration: line-through;
+  opacity: 0.5; }
+
 .ylabel {
-    font-size: 9pt;
-}
+  font-size: 9pt; }
 
 input {
-    width: 48px;
-}
+  width: 48px; }
 
 .xlabel {
-    font-size: 11pt;
-}
-
+  font-size: 11pt; }
 
 rect.selection {
-    opacity: 00;
-}
+  opacity: 00; }
 
 rect.handle.handle-custom--w {
-    opacity: 0.5;
-}
-
+  opacity: 0.5; }
 
 .axis text {
-    font-size: 10px;
+  font-size: 10px;
+  text-align: right; }
 
-    text-align: right;
-}
+.nofgenes {
+  text-decoration: underline; }
 
-.nofgenes  {
-    text-decoration: underline;
-}
-
-/* TCGA */
-#nofgenes_tcga  {
-    text-decoration-color: #B35A5A;
-}
-#line_tcga {
-    fill: none;
-    stroke: #B35A5A;
-    stroke-width: 2;
-}
-#area_tcga {
-    fill: #B35A5A;
-    stroke-width: 0;
-}
-/* GTEX */
-#nofgenes_gtex  {
-    text-decoration-color: #76C25B;
-}
-#line_gtex {
-    fill: none;
-    stroke: #76C25B;
-    stroke-width: 2;
-}
-#area_gtex {
-    fill:  #76C25B;
-    stroke-width: 0;
-}
-/* HPGC */
-#nofgenes_hpgc  {
-    text-decoration-color: #1f78b4;
-}
-#line_hpgc {
-    fill: none;
-    stroke: #1f78b4;
-    stroke-width: 2;
-}
-#area_hpgc {
-    fill:  #1f78b4;
-    stroke-width: 0;
-}
-
-/* PGCLC */
-#nofgenes_pgclc  {
-    text-decoration-color: #a6cee3;
-}
-#line_pgclc {
-    fill: none;
-    stroke: #a6cee3;
-    stroke-width: 2;
-}
-#area_pgclc {
-    fill:  #a6cee3;
-    stroke-width: 0;
-}
-
-/* #nofgenes_jan  { */
-/*     text-decoration-color: #D3CC44; */
-/* } */
-/* #nofgenes_gtex  { */
-/*     text-decoration-color: #76C25B; */
-/* } */
-
+#current_selection {
+  text-decoration: underline overline;
+  text-decoration-color: #6a3d9a; }
 
 .axis line {
-    fill: none;
-    stroke: grey;
-    stroke-width: 1;
-    shape-rendering: crispEdges;
-}
+  fill: none;
+  stroke: grey;
+  stroke-width: 1;
+  shape-rendering: crispEdges; }
+
 .grid {
-    stroke: grey;
-    opacity: 0.1;
-    stroke-width: 0.5;
-}
+  stroke: grey;
+  opacity: 0.1;
+  stroke-width: 0.5; }
 
 .axis path {
-    fill: none;
-    stroke: grey;
-    stroke: 2;
-    shape-rendering: crispEdges;
+  fill: none;
+  stroke: grey;
+  stroke: 2;
+  shape-rendering: crispEdges; }
 
-}
 path line {
-    fill: none;
-    stroke: #000;
-}
+  fill: none;
+  stroke: #000; }
 
+.hover_fade {
+  opacity: 0.8;
+  filter: blur(4px);
+  /* opacity */ }
 
+.venn-circle {
+  transition: fill-opacity, opacity, filter 1.5s cubic-bezier(0.33, 1, 0.68, 1); }
+
+.venn-circle ~ * {
+  transition: fill-opacity, opacity, filter 1.5s cubic-bezier(0.33, 1, 0.68, 1); }
+
+.hover_fade_circle {
+  opacity: 0.5; }
+
+.hover_highlight {
+  opacity: 0.3;
+  fill-opacity: 1;
+  stroke-opacity: 1;
+  stroke-width: 3; }
+
+/* .hover_unfade { */
+/*     opactiy: 1; */
+/*     transition: transform 0.6s cubic-bezier(0.33, 1, 0.68, 1); */
+/*                           /\* opacity *\/ */
+/* } */
 .area {
-    opacity: 0.6;
-}
-    /* jan: #D3CC44; */
-    /* gte: #76C25B; */
-    /* tcgan: #B35A5A; */
+  opacity: 0.6; }
 
+/* jan: #D3CC44; */
+/* gte: $gtex_color; */
+/* tcgan: #B35A5A; */
+.multi_graph_wrapper {
+  text-align: center; }
+
+.graph_wrapper {
+  text-align: center; }
+
+.graph_title {
+  display: inline-block;
+  font-size: 20pt; }
 
 .multi_graph_wrapper {
-    text-align: center
-}
-
-.chart_title {
-    display: inline-block
-}
-
-
-.multi_graph_wrapper {
-    border: 1px outset;
-    border-radius: 10px;
-    float: right;
-    display: grid;
-}
+  border: 1px outset;
+  border-radius: 10px;
+  float: right;
+  display: grid; }
 
 .chart_status {
-    z-index: 1;
-    position: relative;
-    margin-top: -30px;
-    margin-left: 50px;
-}
+  z-index: 1;
+  position: relative;
+  margin-top: -30px;
+  margin-left: 50px; }
 
-.chart_status p{
-    float: left;
-    font-size: 10pt;
-
-}
-
+.chart_status p {
+  float: left;
+  font-size: 10pt; }
 
 #rightbox {
-    align: right;
-    position: relative;
-    float: left;
-    width: 770px;
+  align: right;
+  position: relative;
+  float: left;
+  width: 770px; }
 
-}
-
-#venn  {
-
-    border: 1px outset;
-    border-radius: 10px;
-}
+#venn {
+  border: 1px outset;
+  border-radius: 10px; }
 
 #leftbox {
-    position: relative;
-    float: left;
-    width: 900px;
-}
+  position: relative;
+  float: left;
+  width: 900px; }
 
 .venntooltip {
   position: absolute;
@@ -233,68 +238,59 @@ path line {
   padding: 2px;
   border: 0px;
   border-radius: 8px;
-  opacity: 0;
-}
-body {
-    font-family: 'Open Sans'; /* ,  'Sans-serif'; */
-}
+  opacity: 0; }
 
+body {
+  font-family: 'Open Sans';
+  /* ,  'Sans-serif'; */ }
 
 #rightbox #dlreset {
-    width: 750px;
-    position: relative;
-    float: right;
-}
+  width: 750px;
+  position: relative;
+  float: right; }
+
 #dlreset #reset_original {
-    position: relative;
-    float: right;
-}
+  position: relative;
+  float: right; }
+
 #dlreset #downloadCurSel {
-    position: relative;
-    float: left;
-}
+  position: relative;
+  float: left; }
 
 #saveVenn {
-    position: relative;
-    float: left;
-}
+  position: relative;
+  float: left; }
+
 .clickables button {
-    background: none;
-    border: none;
-    color: grey;
-    font-size: 12.5pt;
-    cursor: pointer;
-    text-decoration: underline;
-    -o-transition: .1s;
-    -ms-transition: .1s;
-    -moz-transition:.1s;
-    -webkit-transition: .1s;
-    transition: .1s;
-
-
-}
-
+  background: none;
+  border: none;
+  color: grey;
+  font-size: 12.5pt;
+  cursor: pointer;
+  text-decoration: underline;
+  -o-transition: .1s;
+  -ms-transition: .1s;
+  -moz-transition: .1s;
+  -webkit-transition: .1s;
+  transition: .1s; }
 
 button:hover {
-    color: black;
-}
+  color: black; }
 
 #paullink {
-    color: black;
-    text-decoration: underline;
-}
+  color: black;
+  text-decoration: underline; }
 
 #intextlink {
-    color: black;
-    text-decoration: none;
-    font-style : italic;
-}
+  color: black;
+  text-decoration: none;
+  font-style: italic; }
 
 #venndisclaimer p {
-    color: grey;
-    text-align: center;
-}
+  color: grey;
+  text-align: center; }
 
 #chartwrapper {
-    width: 770px;
-}
+  width: 770px; }
+
+/*# sourceMappingURL=index.css.map */

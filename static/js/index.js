@@ -17,23 +17,15 @@ const DATA_IV = 0.01;
 const X_IV = 0.4;
 
 var other_db2bool_idxs = {};
-
+var circle_id2fancy_name = {};
 var id_name2histo_object = {};
-// id_name2default_range = {};
-// De default inclusiecriteria zijn:
-// - hPGC expr >0,50 (kolom I) OF  PGCLC expr >0,72 (kolom J)
-// - GTEx expr <3,0 (kolom M)
-// - TCGA expr >2,4 (kolom N)
-
 var id_name2default_range = {
   hpgc: [0.5, MAX_X_DOMAIN],
   gtex: [MIN_X_DOMAIN, 3],
   pgclc: [0.72, MAX_X_DOMAIN],
-  tcga: [2.4, MAX_X_DOMAIN],
+  tcga: [2.3, MAX_X_DOMAIN],
+  // min_hpgc_pgclc: [0.5, MAX_X_DOMAIN],
 };
-
-// var CHARTS = []
-// var CHARTS_to_be_made= []
 var ACTIVE_ID_NAME2CURRENT_SELECTION = new Object();
 
 function sortByKey(array, key) {
@@ -44,23 +36,15 @@ function sortByKey(array, key) {
   });
 }
 
+// given x value round it to correct precision given the global settings of
+// DECIMALS and IV (x is a domain value)
+function round_x(x) {
+  var out = parseFloat(parseFloat(x).toFixed(DECIMALS));
+  return out;
+}
 function round_to_n_decimals(n, decimals) {
   var multi = 10 ** decimals;
   return Math.round(n * multi) / multi;
-}
-
-function range(min, max, step, decimal) {
-  var arr = [];
-  var cur = min;
-  var current_mult = min / step;
-  arr.push(min);
-  while (true) {
-    arr.push(round_to_n_decimals((current_mult += 1) * step, decimal));
-    if (current_mult * step >= max) {
-      break;
-    }
-  }
-  return arr;
 }
 
 function update_brush_handles(brush_handle_node) {
@@ -105,16 +89,42 @@ function update_numeric_inputs(id_name, current_domain_selection) {
   );
 }
 
-// if a brush is selecting up to MAX_X_DOMAIN, we include all genes with
+// Update the text that reports how many genes are currently selected for a
+// chart
+function update_selection_status(id_name, nofgenes_selected, nofgenes_total) {
+  if (!isNaN(nofgenes_selected)) {
+    d3.select(`#nofgenes_${id_name}`).text(nofgenes_selected);
+    d3.select(`#percgenes_${id_name}`).text(
+      ` (${format((nofgenes_selected / nofgenes_total) * 100)}%)`
+    );
+  }
+}
+// If a brush is selecting up to MAX_X_DOMAIN, we include all genes with
 // expressions higher than this too
 function potentially_cross_status(id_name, current_domain_selection) {
-  if (current_domain_selection[1] >= MAX_X_DOMAIN) {
-    d3.select(`#max_range_max_${id_name}`).attr("crossed-out", "true");
-    d3.select(`#input_max_${id_name}`).attr("crossed-out", "true");
+  var ubound_visible, lbound_visible;
+  var ubound_visible = !(current_domain_selection[1] >= MAX_X_DOMAIN),
+    lbound_visible = !(current_domain_selection[0] <= MIN_X_DOMAIN);
+  if (ubound_visible) {
+    // console.log("upper bound visible");
+    d3.selectAll(`.ubound_${id_name}`).attr("crossed-out", "false");
   } else {
-    d3.select(`#max_range_max_${id_name}`).attr("crossed-out", "false");
-    d3.select(`#input_max_${id_name}`).attr("crossed-out", "false");
-    d3.select(`#max_range_max_${id_name}`).style("visibility", "initial");
+    d3.selectAll(`.ubound_${id_name}`).attr("crossed-out", "true");
+  }
+  if (lbound_visible) {
+    d3.selectAll(`.lbound_${id_name}`).attr("crossed-out", "false");
+  } else {
+    d3.selectAll(`.lbound_${id_name}`).attr("crossed-out", "true");
+  }
+  if (lbound_visible && ubound_visible) {
+    $(`#AND_status_${id_name}`).attr("crossed-out", "false");
+  } else {
+    $(`#AND_status_${id_name}`).attr("crossed-out", "true");
+  }
+  if (lbound_visible || ubound_visible) {
+    $(`#OR_status_${id_name}`).attr("crossed-out", "false");
+  } else {
+    $(`#OR_status_${id_name}`).attr("crossed-out", "true");
   }
 }
 // Given range (or extent) of brush, returns limited range to prevent values
@@ -188,7 +198,6 @@ function format(n) {
   // Use to access data from tsv files
   return parseFloat(Math.round(n / IV) * IV).toFixed(2);
 }
-// ////tmpconsole.logg(("U")
 function default_type(d) {
   Object.keys(d).forEach(function (key) {
     if (key == "#H:hugo" || key == "probeset") {
@@ -366,7 +375,7 @@ class histo {
 
   parse_data(data) {
     var x2nofgenes = new Object();
-    var relevant_range = range(MIN_X_DOMAIN, MAX_X_DOMAIN, IV, 2);
+    var relevant_range = d3.range(MIN_X_DOMAIN, MAX_X_DOMAIN, IV).map(round_x);
     relevant_range.forEach(function (val) {
       x2nofgenes[val] = 0;
     });
@@ -374,13 +383,15 @@ class histo {
       cursum = 0;
     var cursum = 0;
     var x2nofgenes_under = new Object();
+    console.log("data", data);
     data
       .slice()
       .sort(function (a, b) {
         return parseFloat(a) - parseFloat(b);
       })
       .forEach(function (val, ind) {
-        var rounded_value = round_to_n_decimals(parseFloat(val), DECIMALS);
+        // console.log((val, ind));
+        var rounded_value = round_x(val);
         cursum += 1;
         x2nofgenes[rounded_value] += 1;
         // //tmpconsole.logg(ind, val);
@@ -395,9 +406,14 @@ class histo {
         }
         x2nofgenes_under[rounded_value] = cursum;
       });
+    console.log("data", data);
     var rounded_data = [];
-    data.forEach(function (x) {
-      var rounded_value = round_to_n_decimals(parseFloat(x), DECIMALS);
+    data.forEach(function (x, ind) {
+      // if (ind == 516) {
+      //   console.log("xxx", x, parseFloat(x.toFixed(DECIMALS)));
+      // }
+      // var rounded_value = parseFloat(x.toFixed(DECIMALS + 1));
+      var rounded_value = x;
       if (rounded_value >= MAX_X_DOMAIN) {
         rounded_value = MAX_X_DOMAIN;
       } else if (rounded_value <= MIN_X_DOMAIN) {
@@ -434,7 +450,6 @@ class histo {
     x2nofgenes_under[MAX_X_DOMAIN] = cursum;
     this.x2nofgenes = x2nofgenes;
     this.x2nofgenes_under = x2nofgenes_under;
-    this.PERC_DIV = this.nofgenes_total / 100;
     this.d3_data = d3_data;
   }
 
@@ -583,8 +598,7 @@ class histo {
     this.brushResizePath = brushResizePath;
     var this_brushResizePath = this.brushResizePath;
     var this_nofgenes_total = this.nofgenes_total;
-    // //tmpconsole.logg("this_nofgenes_total", this_nofgenes_total);
-    var this_PERC_DIV = this.PERC_DIV;
+    // Initialize d3.brush
     this.brush = d3
       .brushX()
       .extent([
@@ -592,7 +606,7 @@ class histo {
         [WIDTH, height],
       ])
       .on("brush", function (d) {
-        // change position of handles based on current position
+        // Change position of handles based on current position
         update_brush_handles(d3.selectAll(`#handle--custom_${this_id_name}`));
 
         // Get current range and domain selected by brush
@@ -603,9 +617,16 @@ class histo {
 
         // If brush selects up to and incl either left or right boundary,
         // cross out text accordingly
-        update_numeric_inputs(
+        update_numeric_inputs(this_id_name, current_domain_selection);
+        // Compute current number of genes selected
+        var nofgenes_selected =
+          this_x2nofgenes_under[round_x(current_domain_selection[1])] -
+          this_x2nofgenes_under[round_x(current_domain_selection[0])];
+        // Update reporter of number of currently selected genes
+        update_selection_status(
           this_id_name,
-          current_domain_selection
+          nofgenes_selected,
+          this_nofgenes_total
           // current_range_selection
         );
         // Select the right subset of the data corresponding to current
@@ -615,97 +636,26 @@ class histo {
         this_main_svg
           .select(".area")
           .attr("d", this_area(this_data.slice(start_idx, end_idx)));
-        // Compute the number of genes currently selected and update the chart
-        var nof_genes_selected =
-          this_x2nofgenes_under[
-            parseFloat(current_domain_selection[1].toFixed(DECIMALS))
-          ] -
-          this_x2nofgenes_under[
-            parseFloat(current_domain_selection[0].toFixed(DECIMALS))
-          ];
-        if (!isNaN(nof_genes_selected)) {
-          d3.select(`#nofgenes_${this_id_name}`).text(nof_genes_selected);
-          d3.select(`#percgenes_${this_id_name}`).text(
-            ` (${format(nof_genes_selected / this_PERC_DIV)}%)`
-          );
-        } else {
-          console.log(
-            current_domain_selection[0].toFixed(DECIMALS),
-            current_domain_selection[1].toFixed(DECIMALS),
-            this_x2nofgenes_under[
-              current_domain_selection[0].toFixed(DECIMALS)
-            ],
-            this_x2nofgenes_under[current_domain_selection[1].toFixed(DECIMALS)]
-          );
-        }
-        // d3.select(`#nofgenes_${this_id_name}`).text(nof_genes_selected)function () {
-        // d3.select(`#percgenes_${this_id_name}`).text(
-        //
-        // );
-        // return nofgenes;
-        // });
-        // var nofgenes_at_x_min =
-        //   this_x2nofgenes_under[round_to_n_decimals(min_x, DECIMALS)];
-        // if (isNaN(nofgenes_at_x_min)) {
-        //   nofgenes_at_x_min = 0;
-        // }
-        // var nofgenes_at_x_max =
-        //   this_x2nofgenes_under[round_to_n_decimals(max_x, DECIMALS)];
-        // if (isNaN(nofgenes_at_x_max)) {
-        //   nofgenes_at_x_max = this_nofgenes_total;
-        // }
-        // var nofgenes = nofgenes_at_x_max - nofgenes_at_x_min;
-        // ////tmpconsole.logg((nofgenes, max_x, min_x);
-        // if (!isNaN(nofgenes)) {
-        //   // Update number of genes selected
-        // }
-        // //////tmpconsole.logg((d3.selectAll(".handle--custom"));
-        // update_brush_handles(d3.selectAll(`.handle--custom-${this_id_name}`));
       })
       .on("end", function () {
-        // ////tmpconsole.logg("END", d3.brushSelection(this))
-        var curRange = d3.event.selection;
-        if (curRange == null) {
-          ////tmpconsole.logg('NULL-RANGE')
-          // get values from range inputs in case end is range is not defined
-          curRange = d3
+        var cur_domain = d3.event.selection;
+        // Prevent empty brush selection just in case
+        if (cur_domain == null) {
+          // Get current domain according to numeric inputs
+          cur_domain = d3
             .selectAll(`.input_range_${this_id_name}`)
             .nodes()
             .map(function (e) {
-              return round(e.value);
+              return round_x(e.value);
             });
-          ////tmpconsole.logg(curRange)
+          // Update the brush according to numeric inputs
           d3.select(`#brush_${this_id_name}`).call(
             this_brush.move,
-            curRange.map(this_x)
+            cur_domain.map(this_x)
           );
         }
-        update_venn(); //unc later
-        // stop_previous_and_update_venn()
-
-        // var current_selection = [];
-        // var x_values = this_x.invert(curRange);
-        // var min_x_val =
-        //   Math.ceil(this_x.invert(curRange[0]) / DATA_IV) * DATA_IV;
-        // var max_x_val =
-        //   Math.floor(this_x.invert(curRange[1]) / DATA_IV) * DATA_IV;
-        // // ////tmpconsole.logg(min_x_val, max_x_val)
-        // range(min_x_val, max_x_val, DATA_IV, DECIMALS).forEach(function (
-        //   x_val
-        // ) {
-        // ////tmpconsole.logg(x_val, this_x2genes[x_val]);
-        // current_selection = current_selection.concat(this_x2genes[x_val]);
-        // Array.prototype.push.apply(current_selection, this_x2nofgenes[x_val]);
-        // });
-        // var current_selection_set = new Set(current_selection);
-        // ACTIVE_ID_NAME2CURRENT_SELECTION[this_id_name] = current_selection_set;
-        // var nofgenes = current_selection_set.size;
-        // d3.select(`#nofgenes_${this_id_name}`).text(function () {
-        //   d3.select(`#percgenes_${this_id_name}`).text(
-        //     " (" + format(nofgenes / this_PERC_DIV) + "%)"
-        //   );
-        //   return nofgenes;
-        // });
+        // Update venn diagram with new selection
+        update_venn();
       });
 
     var this_brush = this.brush;
@@ -777,32 +727,36 @@ jQuery.fn.outerHTML = function (s) {
 
 // return title text element to be used as title for these id_names and
 // tissue_names
-function return_title_div(id_name_list, tissue_name_list) {
-  var comb_id_names = id_name_list.join("-");
+function return_title_div(id_name, tissue_name) {
+  // var comb_id_names = id_name_list.join("-");
+  var bold_tissue_name = $("<b/>", { html: `${tissue_name}` });
   var title = $("<text/>", {
-    "class": "chart_title",
+    "class": "graph_title",
     style: "font-size: 16px;",
+    id: `graph_title_${id_name}`,
+    html: `Max. gene expression in ${bold_tissue_name.outerHTML()} (log₂ scale)`,
   });
-  if (id_name_list.length == 1) {
-    var tissue_name = tissue_name_list[0];
-    title.append(`Max. gene expression in ${tissue_name} (log₂ scale)`);
-  } else {
-    var select_tissue = $("<select/>", { id: "selected_graph" });
-    id_name_list.forEach(function (id_name, ind) {
-      var tissue_name = tissue_name_list[ind];
-      //tmpconsole.logg("option", id_name, tissue_name);
-      select_tissue.append(
-        $("<option/>", { value: id_name, text: tissue_name })
-      );
-    });
-    title.append(
-      `Max. gene expression in ${select_tissue.outerHTML()} (log₂ scale)`
-    );
-    //tmpconsole.logg(select_tissue.outerHTML());
-  }
+  // if (id_name_list.length == 1) {
+  //   var tissue_name = tissue_name_list[0];
+  //   title.append(`Max. gene expression in ${tissue_name} (log₂ scale)`);
+  // } else {
+  //   var select_tissue = $("<select/>", { id: "selected_graph" });
+  //   id_name_list.forEach(function (id_name, ind) {
+  //     var tissue_name = tissue_name_list[ind];
+  //     //tmpconsole.logg("option", id_name, tissue_name);
+  //     select_tissue.append(
+  //       $("<option/>", { value: id_name, text: tissue_name })
+  //     );
+  //   });
+  //   title.append(
+  //     `Max. gene expression in ${select_tissue.outerHTML()} (log₂ scale)`
+  //   );
+  // }
 
   return title;
 }
+
+// function update_operator_statement() {
 
 // Given id name list, return a histogram
 function add_histo(id_name_list, tissue_name_list) {
@@ -811,22 +765,83 @@ function add_histo(id_name_list, tissue_name_list) {
   //tmpconsole.logg(comb_id_names);
   var div_to_append = $("<div />", {
     id: `div_chart_${comb_id_names}`,
+    name: `${comb_id_names}`,
     "class": "multi_graph_wrapper",
   });
-  div_to_append.append(return_title_div(id_name_list, tissue_name_list));
   id_name_list.forEach(function (id_name, ind) {
     var tissue_name = tissue_name_list[ind];
     var svg_wrapper = $("<div/>", {
       id: `chart_${id_name}`,
       "class": "graph_wrapper",
+      display: "flex",
+      name: id_name,
     });
-    // svg_wrapper.append(
-    //   `<text x="325" y="-15" text-anchor="middle" style="font-size: 16px;">Max. gene expression in ${tissue_name} (log₂ scale)</text>`
-    // );
-    svg_wrapper.append(`<svg class="chart" id="expr_${id_name}"></svg>`);
-    svg_wrapper.append(`<div class="chart_status"> <p>Selected
-              <span class="nofgenes" id="nofgenes_${id_name}">13468</span>
-                         <span class="percgenes" id="percgenes_${id_name}">(89.14%)</span> genes whose max. expression in ${tissue_name} is above <input class="input_range_${id_name}" id="input_min_${id_name}" type="number" step="0.01" min="0" max="13">&nbsp;</p><p id="max_range_max_${id_name}">and below <input class="input_range_${id_name}" id="input_max_${id_name}" type="number" step="0.01" min="0" max="13"></p>`);
+    svg_wrapper.append(return_title_div(id_name, tissue_name));
+    var svg_el = $("<svg>", { "class": "chart", id: `expr_${id_name}` });
+    svg_wrapper.append(svg_el.outerHTML());
+    var nofgenes_span = $("<span/>", {
+        "class": "nofgenes",
+        id: `nofgenes_${id_name}`,
+      }),
+      percgenes_span = $("<span/>", {
+        "class": "percgenes",
+        id: `percgenes_${id_name}`,
+      });
+    // OR because should only be visible if not both are crossed out
+    var OR_span = $("<span/>", {
+      "class": "OR_status",
+      id: `OR_status_${id_name}`,
+      html: `whose max. expression in ${tissue_name} is`,
+    });
+
+    var lower_bound_input = $("<input/>", {
+      // "class": `input_range_${id_name}`,
+      "class": `lbound_${id_name} input_range_${id_name}`,
+      id: `input_min_${id_name}`,
+      type: "number",
+      step: IV,
+      min: MIN_X_DOMAIN,
+      max: MAX_X_DOMAIN,
+    });
+    var lower_bound_span = $("<span/>", {
+      "class": `lbound_${id_name}`,
+      id: `lbound_${id_name}`,
+      html: `above ${lower_bound_input.outerHTML()}`,
+    });
+
+    // AND span (should only be visible when both lower and upper spans are visible
+    var AND_span = $("<span/>", {
+      "class": "AND_status",
+      id: `AND_status_${id_name}`,
+      html: "and",
+    });
+
+    // Construct the uperbound input and span
+    var upper_bound_input = $("<input/>", {
+      id: `input_max_${id_name}`,
+      "class": `ubound_${id_name} input_range_${id_name}`,
+      type: "number",
+      step: IV,
+      min: MIN_X_DOMAIN,
+      max: MAX_X_DOMAIN,
+    });
+    var upper_bound_span = $("<span/>", {
+      "class": `ubound_${id_name}`,
+      id: `ubound_status_${id_name}`,
+      html: `below ${upper_bound_input.outerHTML()}`,
+    });
+    // `<p>Selected ${nofgenes_span.outerHTML()}${percgenes_span.outerHTML()} genes ${OR_span.outerHTML()} ${lower_bound_span.outerHTML()} ${AND_span.outerHTML()} ${upper_bound_span.outerHTML()}</p>`
+    var chart_status = $("<div/>", {
+      "class": "chart_status",
+      html: $("<p/>", {
+        html: `<p>Selected ${nofgenes_span.outerHTML()}${percgenes_span.outerHTML()} genes ${OR_span.outerHTML()} ${lower_bound_span.outerHTML()} ${AND_span.outerHTML()} ${upper_bound_span.outerHTML()}</p>`,
+      }).outerHTML(),
+    });
+
+    svg_wrapper.append(chart_status.outerHTML());
+    // svg_wrapper.append(`<div class="chart_status"> <p>Selected
+    //           <span class="nofgenes" id="nofgenes_${id_name}">13468</span>
+    //                      <span class="percgenes" id="percgenes_${id_name}">(89.14%)</span> genes whose max. expression in ${tissue_name} is above <input class="input_range_${id_name}" id="input_min_${id_name}" type="number" step="0.01" min="0" max="13">&nbsp;</p><p id="max_range_max_${id_name}">and below <input class="input_range_${id_name}" id="input_max_${id_name}" type="number" step="0.01" min="0" max="13"></p>`);
     div_to_append.append(svg_wrapper);
     var out = new histo(id_name);
     $.getJSON(`data/${id_name}.json`, "").done(function (exprs) {
@@ -843,8 +858,8 @@ function add_histo(id_name_list, tissue_name_list) {
     // chartwrapper.append(div_to_append);
     id_name2histo_object[id_name] = out;
   });
-
   chartwrapper.append(div_to_append);
+  // update_operator_statement();
 }
 // function add_histo(id_name) {
 //   var out = new histo(id_name);
@@ -1183,30 +1198,111 @@ function get_visible_id_names() {
   });
   return out;
 }
+function get_graph_mask(id_name) {
+  var selected_range = get_selected_range(id_name),
+    histo_obj = id_name2histo_object[id_name],
+    mask = [];
+  if (selected_range != false) {
+    histo_obj["rounded_exprs"].forEach(function (expr, ind) {
+      if (ind == 516) {
+        console.log("HERE", expr, selected_range[0] < expr);
+      }
+      if ((selected_range[0] <= expr) & (expr <= selected_range[1])) {
+        mask.push(1);
+      } else {
+        mask.push(0);
+      }
+      if (ind == 516) {
+        console.log("pushed", mask.slice(-1));
+      }
+    });
+    return mask;
+  } else {
+    return false;
+  }
+}
+
+// Apply func on corresponding elements in arr0 and arr1
+function element_wise_func(arr0, arr1, func) {
+  var out = [];
+  arr0.forEach(function (el, ind) {
+    out.push(func(el, arr1[ind]));
+  });
+  return out;
+}
+
+element_wise_max = function (arr0, arr1) {
+  return element_wise_func(arr0, arr1, math.max);
+};
+element_wise_min = function (arr0, arr1) {
+  return element_wise_func(arr0, arr1, math.min);
+};
 
 function get_masks() {
   out = new Object();
-  var active_graph_id_names = get_visible_id_names();
-  active_graph_id_names.forEach(function (name) {
-    var mask = [];
-    var histo_obj = id_name2histo_object[name];
-    var selected_range = get_selected_range(name);
-    //tmpconsole.logg(selected_range);
-    if (selected_range != false) {
-      histo_obj.rounded_exprs.forEach(function (expr) {
-        if ((selected_range[0] <= expr) & (expr <= selected_range[1])) {
-          mask.push(1);
-        } else {
-          mask.push(0);
-        }
-      });
-      out[name] = mask;
+  $(".multi_graph_wrapper").each(function () {
+    var not_all_ready = false;
+    var graph_els = $(this).children(".graph_wrapper"),
+      multi_graph_name = $(this).attr("name"),
+      graph_masks = [];
+    graph_els.each(function () {
+      var id_name = $(this).attr("id").split("_")[1];
+      console.log(id_name);
+      var this_graph_mask = get_graph_mask(id_name);
+      if (this_graph_mask == false) {
+        not_all_ready = true;
+      }
+      graph_masks.push(this_graph_mask);
+      console.log(graph_masks);
+    });
+    if (not_all_ready) {
+      console.log("here", multi_graph_name);
+      return;
+    }
+    console.log(graph_masks);
+    if (graph_els.length == 1) {
+      out[multi_graph_name] = graph_masks[0];
     } else {
-      return false;
+      // must be the pgc one
+      var operator = $("#pgc_operator").find("option:selected").attr("value");
+      console.log(operator, graph_masks);
+      if (operator == "OR") {
+        var mask = graph_masks.reduce(element_wise_max);
+      } else {
+        var mask = graph_masks.reduce(element_wise_min);
+      }
+      out[multi_graph_name] = mask;
     }
   });
   return out;
 }
+//       }
+
+//       // }
+//       // var selected_range = get_selected_range(id_name);
+//       // var mask = exprs_in_range(,
+//       // })
+//       // if (graph_els.length == 1) {
+//     });
+//     // }
+//     var mask = [];
+//     var histo_obj = id_name2histo_object[name];
+//     var selected_range = get_selected_range(name);
+//     if (selected_range != false) {
+//       histo_obj.rounded_exprs.forEach(function (expr) {
+//         if ((selected_range[0] <= expr) & (expr <= selected_range[1])) {
+//           mask.push(1);
+//         } else {
+//           mask.push(0);
+//         }
+//       });
+//       out[name] = mask;
+//     } else {
+//       return false;
+//     }
+//   });
+//   return out;
+// }
 d3.select("#saveVenn").on("click", function () {
   var today = new Date();
   var dd = today.getDate();
@@ -1263,9 +1359,9 @@ d3.select("#saveVenn").on("click", function () {
 
 function update_venn() {
   // return;
-  //tmpconsole.logg("HUH");
   var inters_idxs = get_intersection_idxs();
   if (inters_idxs == false) {
+    console.log("Postponing update of venn diagram. Waiting for charts");
     return;
   }
   var circle_id2bool_idxs = {
@@ -1274,11 +1370,6 @@ function update_venn() {
   };
   //tmpconsole.logg("circle_id2bool_idxs", circle_id2bool_idxs);
   var circle_ids = Object.keys(circle_id2bool_idxs);
-  console.log(circle_ids);
-  //tmpconsole.logg(circle_ids);
-  //tmpconsole.logg(circle_ids[0]);
-  //tmpconsole.logg(circle_ids[1]);
-  //tmpconsole.logg(circle_ids[2]);
   var rows = [];
   var new_array_set_sizes = [];
   var combs = [[0], [1], [2], [0, 1], [0, 2], [1, 2], [0, 1, 2]];
@@ -1286,26 +1377,12 @@ function update_venn() {
   combs.forEach(function (idxs) {
     //tmpconsole.logg(idxs);
     var first_circle_id = circle_ids[idxs[0]];
-    //tmpconsole.logg("BEGIN", first_circle_id);
     var all_true = circle_id2bool_idxs[first_circle_id].slice();
-    //tmpconsole.logg(all_true);
-    // if ((first_circle_id == "current_selection") & (idxs.length == 1)) {
-    //   // console.log("HERE");
-    //   circle_id2fancy_name[first_circle_id] = [
-    //     [`Current selection (n=${math.sum(all_true)})`],
-    //   ];
-    // }
-    // var set_abbrev
-    // } else {
     var set_abbrev = [[circle_id2fancy_name[first_circle_id]]];
-    // }
-    // set_abbrev.push([]);
-    //tmpconsole.logg("set abbrev", set_abbrev);
     idxs.slice(1).forEach(function (row_idx) {
       var circle_id = circle_ids[row_idx],
         other_mask = circle_id2bool_idxs[circle_id];
       set_abbrev.push([circle_id2fancy_name[circle_id]]);
-      //tmpconsole.logg(set_abbrev);
       other_mask.map(function (el, i) {
         all_true[i] = math.min(el, all_true[i]);
       });
@@ -1477,6 +1554,7 @@ function download(filename, text) {
 // get array with 0/1 at locations where the correspoding gene is in all 3 subsets
 function get_intersection_idxs() {
   var masks = get_masks();
+  console.log(masks);
   if (Object.keys(masks).length != 3) {
     return false;
   }
@@ -1503,6 +1581,7 @@ function add_tooltips() {
     .selectAll("g")
     .on("mouseover", function (d, i) {
       // sort all the areas relative to the current item
+      console.log("xxx", d);
       venn.sortAreas(vennDiv, d);
 
       // Display a tooltip with the current size
@@ -1528,8 +1607,10 @@ function add_tooltips() {
 
     .on("mouseout", function (d, i) {
       tooltip.transition().duration(400).style("opacity", 0);
-      var selection = d3.select(this).transition("tooltip").duration(400);
-      selection
+      var selection = d3
+        .select(this)
+        .transition("tooltip")
+        .duration(400)
         .select("path")
         .style("stroke-width", 0)
         .style("fill-opacity", d.sets.length == 1 ? 0.25 : 0.0)
@@ -1537,7 +1618,82 @@ function add_tooltips() {
     });
 }
 
-var circle_id2fancy_name = {};
+// add explanatory highlights upon hovering over relevant spans in the venn
+// statement
+function add_hover_venn_statement() {
+  Object.keys(id_name2default_range).forEach(function (id_name) {
+    $(`#venn_statement_${id_name}`).hover(
+      function () {
+        $(`.graph_wrapper`).each(function () {
+          if ($(this).attr("name") == id_name) {
+            return;
+          }
+          console.log("continueing");
+
+          $(this).children("*").addClass("hover_fade");
+          // $(this).children("*").each(function() {console.log($(this)
+        });
+      },
+      function () {
+        $(`.graph_wrapper`).each(function () {
+          $(this).children("*").removeClass("hover_fade"); // .animate({
+        }); // ;
+      }
+    );
+  });
+  $("#pgc_operator_span").hover(
+    function () {
+      $(`.graph_wrapper`).each(function () {
+        if (["pgclc", "hpgc"].includes($(this).attr("name"))) {
+          return;
+        }
+        $(this).children("*").addClass("hover_fade");
+        // $(this).children("*").each(function() {console.log($(this)
+      });
+    },
+    function () {
+      $(`.graph_wrapper`).each(function () {
+        $(this).children("*").removeClass("hover_fade");
+        // $(this).children("*").each(function() {console.log($(this)
+      });
+    }
+  );
+
+  // opacity: 0.8
+  $(`#venn_statement_current_selection`).hover(
+    function () {
+      venn.sortAreas(vennDiv, { sets: ["Current Selection"], size: 672 });
+      // venn.sortAreas(vennDiv, $("[data-venn-sets='Current Selection']"));
+      $(".venn-circle").each(function () {
+        if ("Current Selection" != $(this).attr("data-venn-sets")) {
+          $(this).addClass("hover_fade_circle");
+          $(this).find("*").addClass("hover_fade_circle");
+        }
+      });
+    },
+    function () {
+      $(".venn-circle").each(function () {
+        $(this).removeClass("hover_fade_circle");
+        $(this).find("*").removeClass("hover_fade_circle");
+      });
+    }
+  );
+}
+// function () {
+//   $(`.graph_wrapper > *`).each(function () {
+//     $(this).animate({ opacity: 1 }, 100);
+//   });
+// }
+//     );
+//   });
+// }
+// function () {
+//   $(`#area_${id_name}`).animate({ opacity: 0.9 }, 100);
+// },
+// function () {
+//   $(`#area_${id_name}`).animate({ opacity: 0.6 }, 100);
+// }
+// )})}                                            )}
 $(document).ready(function () {
   $.getJSON(`data/CT.json`, "").done(function (data) {
     other_db2bool_idxs["CT"] = data;
@@ -1551,30 +1707,21 @@ $(document).ready(function () {
       other_db2bool_idxs["brug2017"]
     )})`;
   });
-  circle_id2fancy_name["current_selection"] = "Current Selection";
   init_venn();
-  var histo_object_checking = add_histo(
-    ["hpgc", "pgclc"],
-    ["Human PGCs", "PGC-like cell"]
-  );
+  circle_id2fancy_name["current_selection"] = "Current Selection";
+  // var histo_object_checking = add_histo(
+  //   ["min_hpgc_pgclc", "hpgc", "pgclc"],
+  //   ["min. of hpgc and pgclc", "Human PGCs", "PGC-like cell"]
+  // );
+  add_histo(["hpgc", "pgclc"], ["human PGCs", "PGC-like cell"]);
+  // add_histo(["pgclc"], ["PGC-like cell"]);
   var histo_object_checking = add_histo(["tcga"], ["tumors"]);
   var histo_object_gtex = add_histo(["gtex"], ["somatic tissues"]);
   // var histo_object_a = add_histo(["A"], ["A"]);
   // var histo_object_b = add_histo(["B"], ["B"]);
   // var histo_object_c = add_histo(["C"], ["C"]);
-  $("#selected_graph")
+  $("#pgc_operator")
     .on("change", function () {
-      // var all_vals =
-      $(this)
-        .children()
-        .each(function () {
-          //tmpconsole.logg(this["value"]);
-          if (this["selected"]) {
-            $(`#chart_${this["value"]}`).show();
-          } else {
-            $(`#chart_${this["value"]}`).hide();
-          }
-        });
       update_venn();
     })
     .trigger("change");
@@ -1612,4 +1759,5 @@ $(document).ready(function () {
       );
     });
   });
+  add_hover_venn_statement();
 });
