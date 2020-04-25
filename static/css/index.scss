@@ -1,0 +1,346 @@
+$id_name2hex: ("gtex": #76C25B, "tcga": #B35A5A, "hpgc": #1f78b4, "pgclc": #a6cee3);
+$id_name2rgb:(('gtex', (0.463, 0.761, 0.357)),('hpgc', 0.122, 0.471, 0.706),('pgclc', 0.651, 0.808, 0.89),('tcga', (0.702, 0.353, 0.353)));
+$operator_statement_highligh_opacity:  0.25;
+$current_selection_color: #6a3d9a;
+$WIDTH: 750px;
+@each $id_name, $color in $id_name2hex{
+    #chart_#{$id_name} > * {
+        transition: opacity,filter 0.3s cubic-bezier(0.33, 1, 0.68, 1);
+    }
+
+    #venn_statement_#{$id_name}  {
+        background: rgba($color,$operator_statement_highligh_opacity);
+    }
+
+    #nofgenes_#{$id_name}  {
+        text-decoration-color: rgba($color, 1);
+        // transition: transform 0.6s cubic-bezier(0.33, 1, 0.68, 1);
+    }
+    #line_#{$id_name} {
+        fill: none;
+        stroke: rgba($color, 1);
+        // transition: transform 0.6s cubic-bezier(0.33, 1, 0.68, 1);
+        stroke-width: 2;
+    }
+    #area_#{$id_name} {
+        // transition: transform 0.6s cubic-bezier(0.33, 1, 0.68, 1);
+        fill:  rgba($color, 1);
+        stroke-width: 0;
+    }
+}
+
+#venn_statement_current_selection {
+    background: rgba($current_selection_color, $operator_statement_highligh_opacity);
+}
+
+
+footer {
+    margin-bottom: 0;
+    width: 100%;
+    heigth: 3;
+    overflow-y: hidden;
+}
+
+
+#leftbox {
+    float: left;
+    width: 30%;
+}
+
+#venn {
+    float: left;
+    width: 30%;
+    height: 30%;
+}
+
+#venn svg {
+    float: left;
+    // width: 30%;
+    // height: 30%;
+}
+
+// .chart_div {
+//     float: right;
+//     /* transition: transform 0.6s cubic-bezier(0.33, 1, 0.68, 1); */
+//     width: ;
+// }
+
+
+[crossed-out="true"] {
+    text-decoration: line-through;
+    opacity: 0.5;
+}
+.ylabel {
+    font-size: 9pt;
+}
+
+input {
+    width: 48px;
+}
+
+.xlabel {
+    font-size: 11pt;
+}
+
+
+rect.selection {
+    opacity: 00;
+}
+
+rect.handle.handle-custom--w {
+    opacity: 0.5;
+}
+
+
+.axis text {
+    font-size: 10px;
+
+    text-align: right;
+}
+
+.nofgenes  {
+    text-decoration: underline;
+}
+
+#current_selection {
+    text-decoration: underline overline;
+    text-decoration-color: #6a3d9a
+    /* color: #6a3d9a */
+}
+
+
+.axis line {
+    fill: none;
+    stroke: grey;
+    stroke-width: 1;
+    shape-rendering: crispEdges;
+}
+.grid {
+    stroke: grey;
+    opacity: 0.1;
+    stroke-width: 0.5;
+}
+
+.axis path {
+    fill: none;
+    stroke: grey;
+    stroke: 2;
+    shape-rendering: crispEdges;
+
+}
+path line {
+    fill: none;
+    stroke: #000;
+}
+
+.hover_fade {
+    opacity: 0.8;
+    filter: blur(4px);
+    // transition: opacity 0.6s cubic-bezier(0.33, 1, 0.68, 1)
+    ;
+                          /* opacity */
+}
+
+.venn-circle {
+    transition: fill-opacity,opacity,filter 1.5s cubic-bezier(0.33, 1, 0.68, 1)
+}
+.venn-circle* {
+    transition: fill-opacity,opacity,filter 1.5s cubic-bezier(0.33, 1, 0.68, 1)
+}
+
+.hover_fade_circle {
+    // fill-opacity: 0.3;
+    opacity: 0.5;
+    // filter: blur(4px);
+}
+
+.hover_highlight {
+    opacity: 0.3;
+    fill-opacity: 1;
+    stroke-opacity: 1;
+    stroke-width: 3
+    /* transition: transform 0.6s cubic-bezier(0.33, 1, 0.68, 1); */
+                          /* opacity */
+}
+/* .hover_unfade { */
+/*     opactiy: 1; */
+/*     transition: transform 0.6s cubic-bezier(0.33, 1, 0.68, 1); */
+/*                           /\* opacity *\/ */
+/* } */
+
+// .chart_wrapper > * {
+//     transition: transform 0.6s cubic-bezier(0.33, 1, 0.68, 1)
+// }
+.area {
+    opacity: 0.6;
+}
+    /* jan: #D3CC44; */
+    /* gte: $gtex_color; */
+    /* tcgan: #B35A5A; */
+
+
+.multi_graph_wrapper {
+    // text-align: center;
+    box-sizing: border-box;
+    width: 50%;
+    height: 50%;
+    display: table-cell;
+}
+#div_chart_hpgc-pgclc{
+    width: 100%;
+    display: table-row;
+}
+
+#div_chart_hpgc-pgclc > *{
+    width: 50%;
+    height: 50%;
+    display: table-cell;
+}
+.graph_wrapper {
+    text-align: center;
+    display: inline-block;
+    box-sizing: border-box;
+    // width: 50%;
+    // height: 50%;
+
+}
+
+
+.graph_title {
+    display: inline-block;
+    font-size: 20pt;
+}
+
+
+// .multi_graph_wrapper {
+//     border: 1px outset;
+//     border-radius: 10px;
+//     float: right;
+//     display: table-cell;
+// }
+
+// #div_chart_hpgc-pgclc {
+//     display: table;
+//     width: 100%
+
+// }
+
+.chart_status {
+    z-index: 1;
+    position: relative;
+    margin-top: -30px;
+    margin-left: 50px;
+}
+
+.chart_status p{
+    float: left;
+    font-size: 10pt;
+
+}
+
+
+#rightbox {
+    align: right;
+    position: relative;
+    float: left;
+    width: 70%;
+
+}
+
+#venn  {
+
+    border: 1px outset;
+    border-radius: 10px;
+}
+
+#leftbox {
+    position: relative;
+    float: left;
+    width: 50%;
+}
+
+.venntooltip {
+  position: absolute;
+  text-align: center;
+  width: 128px;
+  height: 16px;
+  background: #333;
+  color: #ddd;
+  padding: 2px;
+  border: 0px;
+  border-radius: 8px;
+  opacity: 0;
+}
+html {
+    size: 100vh;
+}
+body {
+    font-family: 'Open Sans'; /* ,  'Sans-serif'; */
+    size: 100vh;
+    align-items: flex-start;
+    width: 100vw;
+    transform: scale(0.67);
+    transform-origin: 0 0;
+}
+
+
+#rightbox #dlreset {
+    width: 30%;
+    position: relative;
+    float: right;
+}
+// #dlreset #reset_original {
+//     position: relative;
+//     float: right;
+// }
+#dlreset #downloadCurSel {
+    position: relative;
+    float: left;
+}
+
+#saveVenn {
+    position: relative;
+    float: left;
+}
+.clickables button {
+    background: none;
+    border: none;
+    color: grey;
+    font-size: 12.5pt;
+    cursor: pointer;
+    text-decoration: underline;
+    -o-transition: .1s;
+    -ms-transition: .1s;
+    -moz-transition:.1s;
+    -webkit-transition: .1s;
+    transition: .1s;
+
+
+}
+
+
+button:hover {
+    color: black;
+}
+
+#paullink {
+    color: black;
+    text-decoration: underline;
+}
+
+#intextlink {
+    color: black;
+    text-decoration: none;
+    font-style : italic;
+}
+
+#venndisclaimer p {
+    color: grey;
+    text-align: center;
+}
+
+#chartwrapper {
+    // width: 770px;
+    display: table;
+    column-count: 2;
+}

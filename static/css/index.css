@@ -76,34 +76,20 @@
 footer {
   margin-bottom: 0;
   width: 100%;
-  heigth: 60px;
+  heigth: 3;
   overflow-y: hidden; }
-
-body {
-  overflow: auto; }
-
-#bodywrapper {
-  transform: scale(0.67);
-  transform-origin: 0 0;
-  width: 1800px;
-  height: auto; }
 
 #leftbox {
   float: left;
-  width: 750px; }
+  width: 30%; }
 
 #venn {
   float: left;
-  width: 1000;
-  height: 1000; }
+  width: 30%;
+  height: 30%; }
 
 #venn svg {
   float: left; }
-
-.chart_div {
-  float: right;
-  /* transition: transform 0.6s cubic-bezier(0.33, 1, 0.68, 1); */
-  width: 750px; }
 
 [crossed-out="true"] {
   text-decoration: line-through;
