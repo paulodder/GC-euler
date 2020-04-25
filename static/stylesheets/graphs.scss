@@ -1,0 +1,151 @@
+.message {
+    background: white;
+    display: flex;
+    align-items: center;
+    // vertically align in center
+
+    justify-content: center;
+    // horizontally align in center
+
+    padding: 20px;
+    // make it a bit more 'in the middle'
+
+    width: 100vw;
+    // why not %?
+
+    height: 100vh;
+
+    // hide this element
+    @media (min-width: 500px) {
+        display: none;
+    }
+}
+
+#graphs {
+  // styles... (scroll down)
+
+  background: white;
+
+  .venn {
+    padding-bottom: 0%; // what does this do? doesn't seem to have effect
+    background: beige;
+  }
+
+  .buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    max-height: 100vh;
+    margin-right: 20px;
+  }
+
+  .button {
+    flex-grow: 1;
+    background: lightblue;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    @extend p !optional;
+    /* @extend p; */
+    color: black;
+    cursor: pointer;
+  }
+
+  .graph {
+    padding: 20% 0;
+    border: 2px solid #444;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &.red {
+      background: lighten(red, 30);
+    }
+    &.green {
+      background: lighten(green, 30);
+    }
+    &.yellow {
+      background: lighten(yellow, 30);
+    }
+    &.purple {
+      background: lighten(purple, 30);
+    }
+  }
+
+  // the relevant part
+
+  $elems: ('info', 'venn', 'graph-0', 'graph-1', 'graph-2', 'graph-3');
+  @each $elem in append($elems, 'buttons') {
+    // define grid area
+    .#{$elem} {
+      grid-area: #{$elem};
+    }
+  }
+
+  width: 100vw;
+  height: 100vh;
+
+  display: none;
+
+  // minimum width required for this to look okay
+  @media (min-width: 500px) {
+    display: grid;
+  }
+
+  @media (min-width: 500px) and (max-width: 799px) {
+    @each $elem in $elems {
+      .#{$elem} {
+        display: none;
+      }
+
+      // with this class, it will display $elem next to the buttons
+      &.display-#{$elem} {
+        .#{$elem} {
+          display: initial;
+        }
+        grid-template-columns: 3fr 10fr;
+        grid-template-areas: "buttons #{$elem}";
+      }
+    }
+  }
+
+  // this overwrites the code above because it is defined below that code
+  @media (min-width: 800px) {
+    .buttons {
+      display: none; // do not show buttons if screen width larger than 800px
+    }
+
+    // removing these does not seem to make a difference?
+    grid-template-rows: 2fr 3fr 3fr 3fr 3fr; // defines scale along rows
+    grid-template-columns: 6fr 3fr; // defines ratio of columns
+
+    grid-template-areas:
+      "info info"
+      "venn graph-0"
+      "venn graph-1"
+      "venn graph-2"
+      "venn graph-3";
+  }
+
+  // also, only overwrites because it sits below the code above
+  @media (min-width: 1000px) {
+      grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr; // all equal, but if you explicitly
+    // define them you prevent the upper and lower graph to become
+    // disproportionally sized
+    grid-template-columns: 8fr 9fr;
+    grid-template-areas:
+        "info graph-0"
+            "info graph-0"
+            "info graph-0"
+            "info graph-1"
+            "venn graph-1"
+            "venn graph-1"
+            "venn graph-2"
+            "venn graph-2"
+            "venn graph-2"
+            "venn graph-3"
+            "venn graph-3"
+            "venn graph-3";
+  }
+}

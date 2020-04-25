@@ -1,0 +1,123 @@
+.message {
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  width: 100vw;
+  height: 100vh; }
+  @media (min-width: 500px) {
+    .message {
+      display: none; } }
+
+#graphs {
+  background: white;
+  width: 100vw;
+  height: 100vh;
+  display: none; }
+  #graphs .venn {
+    padding-bottom: 0%;
+    background: beige; }
+  #graphs .buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    max-height: 100vh;
+    margin-right: 20px; }
+  #graphs .button {
+    flex-grow: 1;
+    background: lightblue;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* @extend p; */
+    color: black;
+    cursor: pointer; }
+  #graphs .graph {
+    padding: 20% 0;
+    border: 2px solid #444;
+    display: flex;
+    justify-content: center;
+    align-items: center; }
+    #graphs .graph.red {
+      background: #ff9999; }
+    #graphs .graph.green {
+      background: #1aff1a; }
+    #graphs .graph.yellow {
+      background: #ffff99; }
+    #graphs .graph.purple {
+      background: #ff1aff; }
+  #graphs .info {
+    grid-area: info; }
+  #graphs .venn {
+    grid-area: venn; }
+  #graphs .graph-0 {
+    grid-area: graph-0; }
+  #graphs .graph-1 {
+    grid-area: graph-1; }
+  #graphs .graph-2 {
+    grid-area: graph-2; }
+  #graphs .graph-3 {
+    grid-area: graph-3; }
+  #graphs .buttons {
+    grid-area: buttons; }
+  @media (min-width: 500px) {
+    #graphs {
+      display: grid; } }
+  @media (min-width: 500px) and (max-width: 799px) {
+    #graphs .info {
+      display: none; }
+    #graphs.display-info {
+      grid-template-columns: 3fr 10fr;
+      grid-template-areas: "buttons info"; }
+      #graphs.display-info .info {
+        display: initial; }
+    #graphs .venn {
+      display: none; }
+    #graphs.display-venn {
+      grid-template-columns: 3fr 10fr;
+      grid-template-areas: "buttons venn"; }
+      #graphs.display-venn .venn {
+        display: initial; }
+    #graphs .graph-0 {
+      display: none; }
+    #graphs.display-graph-0 {
+      grid-template-columns: 3fr 10fr;
+      grid-template-areas: "buttons graph-0"; }
+      #graphs.display-graph-0 .graph-0 {
+        display: initial; }
+    #graphs .graph-1 {
+      display: none; }
+    #graphs.display-graph-1 {
+      grid-template-columns: 3fr 10fr;
+      grid-template-areas: "buttons graph-1"; }
+      #graphs.display-graph-1 .graph-1 {
+        display: initial; }
+    #graphs .graph-2 {
+      display: none; }
+    #graphs.display-graph-2 {
+      grid-template-columns: 3fr 10fr;
+      grid-template-areas: "buttons graph-2"; }
+      #graphs.display-graph-2 .graph-2 {
+        display: initial; }
+    #graphs .graph-3 {
+      display: none; }
+    #graphs.display-graph-3 {
+      grid-template-columns: 3fr 10fr;
+      grid-template-areas: "buttons graph-3"; }
+      #graphs.display-graph-3 .graph-3 {
+        display: initial; } }
+  @media (min-width: 800px) {
+    #graphs {
+      grid-template-rows: 2fr 3fr 3fr 3fr 3fr;
+      grid-template-columns: 6fr 3fr;
+      grid-template-areas: "info info" "venn graph-0" "venn graph-1" "venn graph-2" "venn graph-3"; }
+      #graphs .buttons {
+        display: none; } }
+  @media (min-width: 1000px) {
+    #graphs {
+      grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+      grid-template-columns: 8fr 9fr;
+      grid-template-areas: "info graph-0" "info graph-0" "info graph-0" "info graph-1" "venn graph-1" "venn graph-1" "venn graph-2" "venn graph-2" "venn graph-2" "venn graph-3" "venn graph-3" "venn graph-3"; } }
+
+/*# sourceMappingURL=graphs.css.map */
