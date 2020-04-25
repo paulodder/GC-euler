@@ -8,9 +8,22 @@
     />
     <!-- Use the title from a page's frontmatter if it has one -->
     <title></title>
+    <link
+      href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap"
+      rel="stylesheet"
+    />
     <link href="stylesheets/application-23aba87b.css" rel="stylesheet" />
     <link href="stylesheets/graphs.css" rel="stylesheet" />
-    <script src="javascripts/application-f694a575.js"></script>
+    <script src="js/application-f694a575.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="https://d3js.org/d3.v4.js"></script>
+    <script
+      type="text/javascript"
+      src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/6.6.4/math.min.js"
+    ></script>
+    <!-- <script src="js/index.js"></script> -->
+    <script src="js/new_index.js"></script>
+
     <link href="images/favicon-f15af148.png" rel="icon" type="image/png" />
   </head>
   <body>
@@ -18,28 +31,28 @@
 
     <div id="graphs" class="display-info">
       <div class="info">
-        <h2>about</h2>
+        <h2>Interactive Euler diagram</h2>
         <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce
-          posuere, sem vel volutpat pharetra, ligula dolor imperdiet dui, sit
-          amet fringilla ipsum sem id augue.
+          Germ cell / Cancer (GC) genes or antigens entail a subset of genes
+          highly expressed in cancerous tissues, but whose expression is
+          normally restricted to germ cells. Under physiological conditions
+          these genes are solely ex pressed in immunologically privileged sites,
+          preventing development of tolerance by the immune system. In
+          combination with limited side effects when targeted, these features
+          render GC-genes as ideal therapeutic targets in cancer therapy.
         </p>
         <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce
-          posuere, sem vel volutpat pharetra, ligula dolor imperdiet dui, sit
-          amet fringilla ipsum sem id augue.
-        </p>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce
-          posuere, sem vel volutpat pharetra, ligula dolor imperdiet dui, sit
-          amet fringilla ipsum sem id augue.
+          However, identification of GC-genes (or cancer/testis (CT) genes) has
+          been based on gene expression in whole testicular tissue, rather than
+          germ cells specifically. Most likely, the relative lack of success of
+          CT-gene based therapies can be attributed to these criteria.
         </p>
       </div>
       <div class="venn"><h2>venn</h2></div>
-      <div class="graph graph-0 red"><h2>Graph 0</h2></div>
-      <div class="graph graph-1 blue"><h2>Graph 1</h2></div>
-      <div class="graph graph-2 yellow"><h2>Graph 2</h2></div>
-      <div class="graph graph-3 purple"><h2>Graph 3</h2></div>
+      <div id="graph-0" class="graph graph-0"></div>
+      <div id="graph-1" class="graph graph-1"></div>
+      <div id="graph-2" class="graph graph-2"></div>
+      <div id="graph-3" class="graph graph-3"></div>
 
       <div class="buttons">
         <div class="button" data-display="graph-0">Graph 0</div>
@@ -50,32 +63,5 @@
         <div class="button" data-display="info">Info</div>
       </div>
     </div>
-
-    <script>
-      document.addEventListener("DOMContentLoaded", () => {
-        const graphsElem = document.querySelector("#graphs");
-        const elems = [
-          "graph-0",
-          "graph-1",
-          "graph-2",
-          "graph-3",
-          "venn",
-          "info",
-        ].map((n) => `display-${n}`);
-        console.log(elems);
-        const removeOldClasses = () => {
-          elems.forEach((elem) => graphsElem.classList.remove(elem));
-        };
-        const display = (name) => {
-          removeOldClasses();
-          graphsElem.classList.add(`display-${name}`);
-        };
-        document
-          .querySelectorAll(".button")
-          .forEach((btn) =>
-            btn.addEventListener("click", () => display(btn.dataset.display))
-          );
-      });
-    </script>
   </body>
 </html>

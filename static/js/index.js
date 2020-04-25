@@ -316,6 +316,7 @@ class histo {
       .attr("id", `area_${id_name}`);
 
     // Add line
+
     this.main_svg
       .append("path")
       .attr("class", "line")
@@ -424,6 +425,7 @@ class histo {
 
     x2nofgenes_under[MIN_X_DOMAIN] = 0;
     var last_cursum,
+      // IV_sum = 0,
       d3_data = Array();
     relevant_range.forEach(function (x) {
       if (x2nofgenes[x] == undefined) {
@@ -499,7 +501,7 @@ class histo {
     var id_name = this.id_name;
     this.line = d3
       .line()
-      .curve(d3.curveBasis)
+      .curve(d3.curveNatural)
       .x(function (d) {
         return x(d.x_value);
       })
@@ -515,7 +517,7 @@ class histo {
     var id_name = this.id_name;
     this.area = d3
       .area()
-      .curve(d3.curveBasisOpen)
+      .curve(d3.curveBasis)
       .x(function (d) {
         return this_x(d.x_value);
       })
@@ -699,16 +701,14 @@ class histo {
   }
 }
 
-var vennDiv = d3
-  .select("#venn")
-  .attr("width", vennWidth + vennMargin.left + vennMargin.right)
-  .attr("height", vennHeight + vennMargin.bottom, vennMargin.top);
+var vennDiv = d3.select("#venn");
+// .attr("width", vennWidth + vennMargin.left + vennMargin.right)
+// .attr("height", vennHeight + vennMargin.bottom, vennMargin.top);
 
 function init_venn() {
-  var vennDiv = d3
-    .select("#venn")
-    .attr("width", vennWidth + vennMargin.left + vennMargin.right)
-    .attr("height", vennHeight + vennMargin.bottom, vennMargin.top);
+  var vennDiv = d3.select("#venn");
+  // .attr("width", vennWidth + vennMargin.left + vennMargin.right)
+  // .attr("height", vennHeight + vennMargin.bottom, vennMargin.top);
   // vennChart = venn.VennDiagram(subset_name2size);
 
   // vennDiv.datum(sets).call(vennChart);
@@ -760,7 +760,7 @@ function return_title_div(id_name, tissue_name) {
 
 // Given id name list, return a histogram
 function add_histo(id_name_list, tissue_name_list) {
-  var chartwrapper = $("#chartwrapper");
+  // var chartwrapper = $("#chartwrapper");
   var comb_id_names = id_name_list.join("-");
   //tmpconsole.logg(comb_id_names);
   var div_to_append = $("<div />", {
@@ -1113,10 +1113,9 @@ var subset_name2size = {
   [sn5]: 146 - setSize["7"],
 };
 
-var vennDiv = d3
-  .select("#venn")
-  .attr("width", vennWidth + vennMargin.left + vennMargin.right)
-  .attr("height", vennHeight + vennMargin.bottom, vennMargin.top);
+var vennDiv = d3.select("#venn");
+// .attr("width", vennWidth + vennMargin.left + vennMargin.right)
+// .attr("height", vennHeight + vennMargin.bottom, vennMargin.top);
 
 // vennChart = venn.VennDiagram(subset_name2size);
 // vennDiv.datum(array_of_set_size).call(vennChart);
@@ -1760,4 +1759,5 @@ $(document).ready(function () {
     });
   });
   add_hover_venn_statement();
+  console.log("size", $(window).height(), $(window).width());
 });
