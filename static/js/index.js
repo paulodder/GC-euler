@@ -1571,10 +1571,10 @@ document.addEventListener("DOMContentLoaded", () => {
   tooltip = d3.select(".venn").append("div").attr("class", "venntooltip");
   init_buttons();
   init_other_db2mask();
-  g = new Graph(0, "hpgc", "HPGC");
-  g = new Graph(1, "pgclc", "PGCLC");
-  g = new Graph(2, "gtex", "somatic");
-  g = new Graph(3, "tcga", "cancer");
+  g = new Graph(0, "hpgc", "human primordial germ cells");
+  g = new Graph(1, "pgclc", "PGC-like cells ");
+  g = new Graph(2, "gtex", "somatic tissues");
+  g = new Graph(3, "tcga", "tumors");
   const graphsElem = document.querySelector("#graphs");
   const elems = [
     "graph-0",
