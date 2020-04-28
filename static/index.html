@@ -12,11 +12,15 @@
       href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap"
       rel="stylesheet"
     />
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+
     <link href="stylesheets/application-23aba87b.css" rel="stylesheet" />
     <link href="stylesheets/graphs.css" rel="stylesheet" />
+    <script type="text/javascript" src="altered_modules/venn.js"></script>
     <script src="js/application-f694a575.js"></script>
-    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script type="text/javascript" src="https://d3js.org/d3.v4.js"></script>
+    <script type="text/javascript" src="altered_modules/venn.js"></script>
+
     <script
       type="text/javascript"
       src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/6.6.4/math.min.js"
@@ -48,7 +52,45 @@
           CT-gene based therapies can be attributed to these criteria.
         </p>
       </div>
-      <div class="venn"><h2>venn</h2></div>
+      <div class="venn" id="venn-wrapper">
+        <p style="font-size: 120%;">
+          The
+          <span id="venn_statement_current_selection"
+            ><b>current selection</b></span
+          >
+          is the set of genes that are currently selected in the<br />
+          <span id="operator_statement"
+            >(<span
+              class="venn_statement"
+              id_name="hpgc"
+              id="venn_statement_hpgc"
+              >Human PGC</span
+            >
+            <span id="pgc_operator_span">
+              <select id="pgc_operator">
+                <option value="OR">or</option>
+                <option value="AND">and</option>
+              </select>
+            </span>
+            <span
+              id="venn_statement_pgclc"
+              class="venn_statement"
+              id_name="pgclc"
+              >PGC-like cell</span
+            >
+            histogram)
+          </span>
+          and the
+          <span id="venn_statement_gtex" class="venn_statement" id_name="pgclc"
+            >GTEx</span
+          >
+          histogram and the
+          <span id="venn_statement_tcga" class="venn_statement" id_name="pgclc"
+            >TCGA</span
+          >
+          histogram
+        </p>
+      </div>
       <div id="graph-0" class="graph graph-0"></div>
       <div id="graph-1" class="graph graph-1"></div>
       <div id="graph-2" class="graph graph-2"></div>
