@@ -25,8 +25,6 @@ var id_name2default_selection = {
   circle_id2fancy_name = {};
 // var
 
-var tooltip = d3.select("body").append("div").attr("class", "venntooltip");
-
 // given x value round it to correct precision given the global settings of
 // DECIMALS and IV (x is a domain value)
 function round_x(x) {
@@ -204,7 +202,12 @@ function init_buttons() {
   venn_buttons
     .append("button")
     .attr("id", "download_cur_sel")
-    .html("Download current selection (CSV)");
+    .html("Download current selection as .csv");
+
+  venn_buttons
+    .append("button")
+    .attr("id", "save_venn")
+    .html("Export diagram as .png");
 
   venn_buttons
     .append("button")
@@ -246,6 +249,57 @@ function init_buttons() {
         })
       );
     });
+  });
+
+  d3.select("#save_venn").on("click", function () {
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth() + 1;
+    var yyyy = today.getFullYear();
+    var hh = today.getHours();
+    var mi = today.getMinutes();
+    if (dd < 10) {
+      dd = "0" + dd;
+    }
+    if (mm < 10) {
+      mm = "0" + mm;
+    }
+    if (hh < 10) {
+      hh = "0" + hh;
+    }
+    if (mi < 10) {
+      mi = "0" + mi;
+    }
+
+    var stamp = yyyy + "_" + mm + "_" + dd + "_" + hh + ":" + mi;
+
+    var svgs = document.querySelector(".venn svg");
+
+    var svgData = new XMLSerializer().serializeToString(svgs);
+    var canvas = document.createElement("canvas");
+
+    canvas.width = d3.select(".venn svg").attr("width");
+    canvas.height = d3.select(".venn svg").attr("height");
+
+    var ctx = canvas.getContext("2d");
+
+    var img = document.createElement("img");
+
+    img.setAttribute("src", "data:image/svg+xml;base64," + btoa(svgData));
+
+    img.onload = function () {
+      // window.open(img.src.replace('data:application/octet-stream'));
+      // window.href = canvas.toDataURL( "image/png" );
+      ctx.drawImage(img, 0, 0);
+
+      var link = document.createElement("a");
+      link.download = "Bruggeman_Venn_" + stamp;
+      link.href = canvas.toDataURL("image/png");
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      delete link;
+    };
   });
 }
 
@@ -303,28 +357,14 @@ class Graph {
 
   set_title() {
     // var bold_tissue_name = $("<b/>", { html: `${this.tissue_name}` });
-    this.svg
+    this.wrapper
       .append("text")
       .attr("class", "title")
       .attr("id_name", this.id_name)
       .attr("id", `graph_title_${this.id_name}`)
-      .text(`Max. gene expression in ${this.tissue_name} (log\u2082 scale)`);
-    // .append("b")
-    // .html(this.tissue_name);
-    // <b></b> (log\u2082 scale)`
-    // );
-    // .html(
-    //   `Max. gene expression in <b>${this.tissue_name}</b> (log\u2082 scale)`
-    // )
-
-    // .text(`Max. gene expression in <b>${this.tissue_name}</b> (log₂ scale)`);
-    // var title = $("<text/>", {
-    //   "class": "graph_title",
-    //   style: "font-size: 16px;",
-    //   id: `graph_title_${this.id_name}`,
-    //   html: ,
-    // });
-    // this.wrapper.(title);
+      .html(
+        `Max. gene expression in <b>${this.tissue_name}</b> (log\u2082 scale)`
+      );
   }
 
   // init x-labels but do not set x and y attributes yet
@@ -1141,10 +1181,30 @@ class Graph {
           end_idx =
             ((current_range_selection[1] - self.margin.left) /
               (self.width - (self.margin.left + self.margin.right))) *
-            self.d3_data.length; //should self not be x2nofgenes?
-        self.svg
-          .select(".area")
-          .attr("d", self.area(self.d3_data.slice(start_idx, end_idx)));
+            self.d3_data.length;
+        if (self.x.invert(start_idx) < current_range_selection[0]) {
+          start_idx += 1;
+        }
+        if (self.x.invert(end_idx) > current_range_selection[1]) {
+          end_idx -= 1;
+        }
+        var selected_data = self.d3_data.slice(start_idx, end_idx);
+        // selected_data[0]["x_value"] = self.x.invert(current_range_selection[0]);
+        // selected_data[selected_data.length - 1]["x_value"] = self.x.invert(
+        //   current_range_selection[1]
+        // );
+        // selected_data.unshift(weighted_expr_mean(start_idx
+        console.log(
+          "selected_first",
+          selected_data[0]["x_value"],
+          self.x.invert(current_range_selection[0])
+        );
+        console.log(
+          "selected_last",
+          selected_data[selected_data.length - 1]["x_value"],
+          self.x.invert(current_range_selection[1])
+        );
+        self.svg.select(".area").attr("d", self.area(selected_data));
       })
       .on("end", function () {
         var cur_selection = d3.event.selection;
@@ -1291,9 +1351,17 @@ function get_intersection_idxs() {
   var hpgc_mask = masks["hpgc"],
     pgclc_mask = masks["pgclc"];
   console.log("[hpgc_mask, pgclc_mask]", [hpgc_mask, pgclc_mask]);
-  masks["hpgc-pgclc"] = [hpgc_mask, pgclc_mask].reduce(function (a, b) {
-    return element_wise_func(a, b, math.max);
-  });
+  // if (d3.select('#pgc_operator')
+  if ($("#pgc_operator").find("option:selected").attr("value") == "AND") {
+    masks["hpgc-pgclc"] = [hpgc_mask, pgclc_mask].reduce(function (a, b) {
+      return element_wise_func(a, b, math.min);
+    });
+  } else if ($("#pgc_operator").find("option:selected").attr("value") == "OR") {
+    masks["hpgc-pgclc"] = [hpgc_mask, pgclc_mask].reduce(function (a, b) {
+      return element_wise_func(a, b, math.max);
+    });
+  }
+
   delete masks["hpgc"];
   delete masks["pgclc"];
   // return intersection of all 3
@@ -1413,13 +1481,13 @@ function update_venn() {
 }
 
 function add_tooltips() {
+  var tooltip = d3.select("body").append("div").attr("class", "venntooltip");
   // add listeners to all the groups to display tooltip on mouseover
   vennDiv = d3.select(".venn");
   vennDiv
     .selectAll("g")
     .on("mouseover", function (d, i) {
       // sort all the areas relative to the current item
-      console.log("xxx", d);
       venn.sortAreas(vennDiv, d);
 
       // Display a tooltip with the current size
@@ -1532,6 +1600,11 @@ document.addEventListener("DOMContentLoaded", () => {
       redraw(id_name);
     });
   });
+  $("#pgc_operator")
+    .on("change", function () {
+      update_venn();
+    })
+    .trigger("change");
   // $(window).trigger("resize");
   add_hover_venn_statement();
 });
