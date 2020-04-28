@@ -1,6 +1,7 @@
 console.log("HER");
 var g;
 var id_name2graph = {};
+var tooltip;
 const MAX_X_DOMAIN = 13,
   MIN_X_DOMAIN = -1,
   DECIMALS = 2,
@@ -1481,7 +1482,7 @@ function update_venn() {
 }
 
 function add_tooltips() {
-  var tooltip = d3.select("body").append("div").attr("class", "venntooltip");
+  var tooltip = d3.select(".venntooltip");
   // add listeners to all the groups to display tooltip on mouseover
   vennDiv = d3.select(".venn");
   vennDiv
@@ -1567,6 +1568,7 @@ function add_hover_venn_statement() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+  tooltip = d3.select(".venn").append("div").attr("class", "venntooltip");
   init_buttons();
   init_other_db2mask();
   g = new Graph(0, "hpgc", "HPGC");
@@ -1600,6 +1602,7 @@ document.addEventListener("DOMContentLoaded", () => {
       redraw(id_name);
     });
   });
+
   $("#pgc_operator")
     .on("change", function () {
       update_venn();

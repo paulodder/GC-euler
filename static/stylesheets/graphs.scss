@@ -54,9 +54,14 @@ $WIDTH: 750px;
     }
 }
 
+/* body { */
+/*     height: 100vh; */
+/*     margin: 0px; */
+/* } */
+
+
 #graphs {
   // styles... (scroll down)
-
     background: white;
 
 
@@ -81,9 +86,21 @@ $WIDTH: 750px;
     cursor: pointer;
   }
 
+  .venn {
+      border: 1px solid grey;
+  }
+
+
   .graph {
+
+      .title {
+          order: -1;
+
+      }
     padding: 0 0;
     border: 2px solid #444;
+
+
 
     align-content: space-between;
     flex-direction: vector;
@@ -149,25 +166,35 @@ $WIDTH: 750px;
       background: lighten(purple, 30);
     }
   }
-  #venn-wrapper {
-    padding-bottom: 0%; // what does this do? doesn't seem to have effect
-    justify-content: space-between;
-    flex-direction: column;
-    text-align: center;
-    background: white;
-    svg {
-        width: 100%;
-        height: 100%;
-    }
 
-}
+  // remove horiz border between hpgc and pgclc
+  .graph-0 {
+      border-bottom: 2px dashed grey;
+
+  }
+  .graph-1 {
+      border-top: 2px dashed grey;
+  }
+
+  #venn-wrapper {
+      padding-bottom: 0%; // what does this do? doesn't seem to have effect
+      justify-content: space-between;
+      flex-direction: column;
+      text-align: center;
+      background: white;
+      svg {
+          width: 100%;
+          height: 100%;
+      }
+
+  }
 
   // the relevant part
 
   $elems: ('info', 'venn', 'graph-0', 'graph-1', 'graph-2', 'graph-3');
   @each $elem in append($elems, 'buttons') {
-    // define grid area
-    .#{$elem} {
+      // define grid area
+      .#{$elem} {
       grid-area: #{$elem};
     }
   }
@@ -295,7 +322,7 @@ $WIDTH: 750px;
 }
 
 .venntooltip {
-  position: absolute;
+  position: relative;
   text-align: center;
   width: 128px;
   height: 16px;
