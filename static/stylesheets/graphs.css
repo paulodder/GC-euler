@@ -111,10 +111,6 @@
   height: 100vh;
   display: none;
 }
-#graphs .venn {
-  padding-bottom: 0%;
-  background: beige;
-}
 #graphs .buttons {
   display: flex;
   flex-direction: column;
@@ -135,15 +131,41 @@
 #graphs .graph {
   padding: 0 0;
   border: 2px solid #444;
-  /* display: flex; */
+  align-content: space-between;
+  flex-direction: vector;
+  /* .title { */
+  /*     width: 1000; */
+  /* } */
+  display: flex;
   /* justify-content: center; */
   align-items: space-between;
   flex-direction: column;
+}
+#graphs .graph .selection_statement {
+  width: 80%;
+  /* height: 20%; */
+  text-align: center;
+}
+#graphs .graph .selection_statement * {
+  color: black;
+  font-size: 90%;
+}
+#graphs .graph svg {
+  align-content: space-between;
+  flex-direction: vector;
+  /* .line {
+  /*     stroke: grey; */
+  /*     opacity: 0.1; */
+  /*     stroke-width: 0.5; */
+  /* } */
 }
 #graphs .graph svg .grid {
   stroke: grey;
   opacity: 0.1;
   stroke-width: 0.5;
+}
+#graphs .graph svg rect.selection {
+  opacity: 0;
 }
 #graphs .graph.red {
   background: #ff9999;
@@ -156,6 +178,17 @@
 }
 #graphs .graph.purple {
   background: #ff1aff;
+}
+#graphs #venn-wrapper {
+  padding-bottom: 0%;
+  justify-content: space-between;
+  flex-direction: column;
+  text-align: center;
+  background: white;
+}
+#graphs #venn-wrapper svg {
+  width: 100%;
+  height: 100%;
 }
 #graphs .info {
   grid-area: info;
@@ -264,6 +297,64 @@
     grid-template-columns: 8fr 9fr;
     grid-template-areas: "info graph-0" "info graph-0" "info graph-0" "info graph-1" "venn graph-1" "venn graph-1" "venn graph-2" "venn graph-2" "venn graph-2" "venn graph-3" "venn graph-3" "venn graph-3";
   }
+  #graphs .venn {
+    display: flex;
+    flex-direction: column;
+    /* grid-template-rows: 1fr; */
+  }
+  #graphs .venn .venn-buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    order: -1;
+  }
+}
+
+.area {
+  opacity: 0.7;
+}
+
+.hover_fade {
+  opacity: 0.8;
+  filter: blur(4px);
+  /* opacity */
+}
+
+[crossed-out=true] {
+  text-decoration: line-through;
+  opacity: 0.5;
+}
+
+/* .venn { */
+/*     /\* justify-content: space-between; *\/ */
+/*     /\* align-items *\/ */
+/*     /\* svg:  *\/ */
+/* } */
+.nofgenes {
+  text-decoration: underline;
+}
+
+#venn_statement_current_selection {
+  /* text-decoration: underline overline; */
+  background: rgba(106, 61, 154, 0.25);
+}
+
+.venntooltip {
+  position: absolute;
+  text-align: center;
+  width: 128px;
+  height: 16px;
+  background: #333;
+  color: #ddd;
+  padding: 2px;
+  border: 0px;
+  border-radius: 8px;
+  opacity: 0;
+}
+
+.selection_statement {
+  z-index: 2;
+  /* background: ; */
 }
 
 /*# sourceMappingURL=graphs.css.map */
