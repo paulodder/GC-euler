@@ -1364,9 +1364,9 @@ centers the diagram in the available space at the same time */
 
   /*global console:true*/
 
-  function VennDiagram(setAbbrevSize) {
-    var width = 900, //!!!
-      height = 900,
+  function VennDiagram(setAbbrevSize, desired_size) {
+    var height = desired_size[0],
+      width = desired_size[1],
       padding = 15,
       duration = 1000,
       orientation = Math.PI / 2,
