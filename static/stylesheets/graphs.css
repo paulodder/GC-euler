@@ -114,6 +114,19 @@
   width: 100vw;
   height: 100vh;
   display: none;
+  /* @media (min-width: 500px) { */
+  /*     grid-template-rows: 1fr; // all equal, but if you explicitly */
+  /*   // define them you prevent the upper and lower graph to become */
+  /*     // disproportionally sized */
+  /*     grid-template-columns: 1fr; */
+  /*     grid-template-areas: */
+  /*       "info" */
+  /*           "graph-0" */
+  /*           "graph-1" */
+  /*           "graph-2" */
+  /*           "graph-3" */
+  /*           "venn"; */
+  /* } */
 }
 #graphs .buttons {
   display: flex;
@@ -136,46 +149,51 @@
   border: 1px solid grey;
 }
 #graphs .graph {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr 7fr 2fr;
+  grid-template-areas: "title" "graph" "selection_statement";
+  /* flex-direction: column; */
+  /* justify-content: space-between; */
+  /* .title { */
+  /*     order: -1; */
+  /* } */
   padding: 0 0;
   border: 2px solid #444;
-  display: flex;
-  flex-direction: column;
+  /* display: flex; */
+  /* flex-direction: column; */
   /* align-items: space-between; */
   /* justify-content: space-between; */
-  justify-content: space-around;
+  /* justify-content: space-around; */
   /* .title { */
   /*     width: 1000; */
   /* } */
-  display: flex;
-  /* justify-content: center; */
-  align-items: space-between;
-  flex-direction: column;
+  /* display: flex; */
+  /* /\* justify-content: center; *\/ */
+  /* align-items: space-between; */
+  /* flex-direction: column; */
 }
 #graphs .graph .title {
-  order: -1;
+  text-align: center;
+  grid-area: title;
 }
 #graphs .graph .selection_statement {
-  width: 90%;
-  min-height: 20%;
-  margin: 0px;
-  /* : 20%; */
+  /* margin-top: 0px; */
+  /* width: 80%; */
+  /* min-height: 20%; */
+  /* margin: 0px; */
+  /* margin-bottom: 2px; */
+  /* /\* : 20%; *\/ */
   text-align: center;
+  grid-area: selection_statement;
+  font-size: 80%;
 }
 #graphs .graph .selection_statement * {
   color: black;
-  /* max-height: 100%; */
-  font-size: 85%;
-  /* font-size: ; */
+  font-size: 80%;
 }
 #graphs .graph svg {
-  /* flex-direction: vector; */
-  /* /\* align-content: space-between; *\/ */
-  /* max-height: 70%; */
-  /* .line {
-  /*     stroke: grey; */
-  /*     opacity: 0.1; */
-  /*     stroke-width: 0.5; */
-  /* } */
+  grid-area: graph;
 }
 #graphs .graph svg .grid {
   stroke: grey;
@@ -205,14 +223,15 @@
 }
 #graphs #venn-wrapper {
   padding-bottom: 0%;
-  justify-content: space-between;
-  flex-direction: column;
+  /* display: flex; */
+  /* justify-content: space-between; */
+  /* flex-direction: column; */
   text-align: center;
   background: white;
-}
-#graphs #venn-wrapper svg {
-  width: 100%;
-  height: 100%;
+  /* svg { */
+  /*     width: 100%; */
+  /*     height: 100%; */
+  /* } */
 }
 #graphs .info {
   grid-area: info;
@@ -322,15 +341,47 @@
     grid-template-areas: "info graph-0" "info graph-0" "info graph-0" "info graph-1" "venn graph-1" "venn graph-1" "venn graph-2" "venn graph-2" "venn graph-2" "venn graph-3" "venn graph-3" "venn graph-3";
   }
   #graphs .venn {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-rows: 0.05fr 0.2fr 0.7fr;
+    grid-template-columns: 1fr;
+    grid-template-areas: "venn_buttons" "venn_statement" "venn_svg";
+    text-align: center;
+    /* "info graph-1" */
+    /* "venn graph-1" */
+    /* "venn graph-1" */
+    /* "venn graph-2" */
+    /* "venn graph-2" */
+    /* "venn graph-2" */
+    /* "venn graph-3" */
+    /* "venn graph-3" */
+    /* "venn graph-3"; */
+    /* flex-direction: column; */
+    /* .venn-buttons { */
+    /*     display: flex; */
+    /*     /\* flex-direction: row; *\/ */
+    /*     justify-content: space-between; */
+    /*     align-items: flex-start; */
+    /*     order: -1; */
+    /* } */
     /* grid-template-rows: 1fr; */
   }
-  #graphs .venn .venn-buttons {
+  #graphs .venn .venn_buttons {
+    grid-area: venn_buttons;
     display: flex;
-    flex-direction: row;
     justify-content: space-between;
-    order: -1;
+  }
+  #graphs .venn .venn_statement_wrapper {
+    grid-area: venn_statement;
+    max-height: 20%;
+    font-size: 80%;
+  }
+  #graphs .venn .venn_statement_wrapper * {
+    font-size: 80%;
+  }
+  #graphs .venn svg {
+    grid-area: venn_svg;
+    overflow-x: hide;
+    margin: auto;
   }
 }
 
@@ -376,9 +427,14 @@
   opacity: 0;
 }
 
-.selection_statement {
-  /* z-index: 2; */
-  max-height: 20%;
-}
+/* .venn_statement_wrapper { */
+/*     /\* max-height: 10%; *\/ */
+/*     width: 100%; */
+/*     font-size: 80%; */
+/*     *{ */
+/*         font-size: 80%;; */
+/*     } */
+/* } */
+/* .curre */
 
 /*# sourceMappingURL=graphs.css.map */

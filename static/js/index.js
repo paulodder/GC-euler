@@ -169,9 +169,7 @@ function update_selection_status(id_name, nofgenes_selected, nofgenes_total) {
   }
 }
 
-// function init_venn (){
-
-// }
+function init_venn() {}
 
 function download(filename, text) {
   var element = document.createElement("a");
@@ -198,7 +196,7 @@ function init_buttons() {
   let venn_div = d3.select(".venn");
   var venn_buttons = venn_div
     .append("div")
-    .classed("venn-buttons", true)
+    .classed("venn_buttons", true)
     .attr("order", 1);
   venn_buttons
     .append("button")
@@ -333,7 +331,6 @@ class Graph {
       self.set_svg(); // add svg element to div
       self.set_title();
       self.set_ax_labels();
-
       self.init_axes();
       self.set_line();
       self.set_area();
@@ -341,19 +338,13 @@ class Graph {
       self.set_brush();
       self.set_input_domain_listener();
       // self.set_scales();
+      // self.draw();
+      // self.draw();
       self.draw();
       // self.set_svg();
       // self.fill();
       // self.redraw();
     });
-
-    var current_n = 0;
-    // this.set_data().then(function () {
-    //   //tmpconsole.logg(this);
-    //   this.fill(this.exprs);
-    // });
-    // this.set_axes();
-    // this.add_venn_circle()
   }
 
   set_title() {
@@ -443,10 +434,13 @@ class Graph {
     // `<p>Selected ${nofgenes_span.outerHTML()}${percgenes_span.outerHTML()} genes ${OR_span.outerHTML()} ${lower_bound_span.outerHTML()} ${AND_span.outerHTML()} ${upper_bound_span.outerHTML()}</p>`
     var selection_statement = $("<div/>", {
       "class": "selection_statement",
-      html: $("<p/>", {
-        html: `<p>Selected ${nofgenes_span.outerHTML()}${percgenes_span.outerHTML()} genes ${OR_span.outerHTML()} ${lower_bound_span.outerHTML()} ${AND_span.outerHTML()} ${upper_bound_span.outerHTML()}</p>`,
-      }).outerHTML(),
+      html: `Selected ${nofgenes_span.outerHTML()}${percgenes_span.outerHTML()} genes ${OR_span.outerHTML()} ${lower_bound_span.outerHTML()} ${AND_span.outerHTML()} ${upper_bound_span.outerHTML()}`,
     });
+    // html: $("<p/>", {
+    //   html: `Selected ${nofgenes_span.outerHTML()}${percgenes_span.outerHTML()} genes ${OR_span.outerHTML()} ${lower_bound_span.outerHTML()} ${AND_span.outerHTML()} ${upper_bound_span.outerHTML()}`,
+    // })
+    // .outerHTML(),
+    // });
     $(`${this.wrapper_selector}`).append(selection_statement);
     // this.wrapper.(chart_status.outerHTML());
 
@@ -474,8 +468,13 @@ class Graph {
   // get size of wrapper
   get_size() {
     // var wrapper_info = this.wrapper.node().getBoundingClientRect();
-    var wrapper_info = this.svg.node().getBoundingClientRect();
-    return [wrapper_info.height, wrapper_info.width];
+
+    var wrapper_info = this.wrapper.node().getBoundingClientRect();
+    return [0.7 * wrapper_info.height, wrapper_info.width];
+    // return [
+    //   0.7 * document.documentElement.clientHeight * (1 / 4),
+    //   document.documentElement.clientWidth * (9 / (8 + 9)),
+    // ];
   }
 
   scale_gridlines() {
@@ -588,8 +587,10 @@ class Graph {
   set_scales() {
     // get parent size
     var size = this.get_size();
+    console.log("size", size);
     this.height = size[0];
     this.width = size[1];
+    this.svg.attr("width", "100%").attr("height", this.height);
 
     this.margin = {
       left: 0.065 * this.width,
@@ -721,7 +722,6 @@ class Graph {
     this.draw_axes();
     this.draw_brush();
     this.draw_line();
-    // this.draw_area();
     return;
     console.log("drawing");
 
@@ -1125,7 +1125,7 @@ class Graph {
       // .attr("height", height + margin.bottom + margin.top)
       .append("svg")
       .attr("width", "100%")
-      // .attr("height", "80%")
+      // .attr("height", "65%")
       .attr("id_name", this.id_name)
       .classed("graph-svg", true);
     // .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
@@ -1438,23 +1438,25 @@ function update_venn() {
     JSON.stringify(new_array_set_sizes),
     JSON.stringify(subset_name2size)
   );
-  // vennDiv.datum(new_array_set_sizes).call(vennChart);
+  // venn_div.datum(new_array_set_sizes).call(vennChart);
   // vennChart = venn.VennDiagram(subset_name2size);
-  let parent_div_info = document
-      .getElementById("venn-wrapper")
-      .getBoundingClientRect(),
-    desired_size = [0.8 * parent_div_info.height, 1 * parent_div_info.width];
+  let parent_div_info = d3.select(".venn").node().getBoundingClientRect(),
+    desired_size = [0.65 * parent_div_info.height, 0.8 * parent_div_info.width];
+  // .getElementById(".venn")
+  // .getBoundingClientRect(),
+
+  console.log("parent_div_info", desired_size);
   // parent_div_info.se
-  let vennDiv = d3.select(".venn");
-  // var vd = vennDiv
-  vennDiv
+  let venn_div = d3.select(".venn");
+  // var vd = venn_div
+  venn_div
     .datum(new_array_set_sizes)
     .call(venn.VennDiagram(subset_name2size, desired_size));
   d3.select(".venn").select("svg"); // .attr("height", "80%").attr("width", "80%")
 
   // vd.call();
-  // vennDiv.datum(new_array_set_sizes).call(vennChart);
-  add_tooltips();
+  // venn_div.datum(new_array_set_sizes).call(vennChart);
+  // add_tooltips();
   // var new_array_set_sizes = [
   //   // Variable
   //   { sets: setAbbrevs["1"], size: set_sizes[0] },
@@ -1484,12 +1486,12 @@ function update_venn() {
 function add_tooltips() {
   var tooltip = d3.select(".venntooltip");
   // add listeners to all the groups to display tooltip on mouseover
-  vennDiv = d3.select(".venn");
-  vennDiv
+  venn_div = d3.select(".venn");
+  venn_div
     .selectAll("g")
     .on("mouseover", function (d, i) {
       // sort all the areas relative to the current item
-      venn.sortAreas(vennDiv, d);
+      venn.sortAreas(venn_div, d);
 
       // Display a tooltip with the current size
       tooltip.transition().duration(400).style("opacity", 0.9);
@@ -1547,10 +1549,11 @@ function add_hover_venn_statement() {
       d3.selectAll(`.graph.gtex,.graph.tcga`).classed("hover_fade", false);
     }
   );
+  var venn_div = d3.select(".venn");
   $(`#venn_statement_current_selection`).hover(
     function () {
-      venn.sortAreas(vennDiv, { sets: ["Current Selection"], size: 672 });
-      // venn.sortAreas(vennDiv, $("[data-venn-sets='Current Selection']"));
+      venn.sortAreas(venn_div, { sets: ["Current Selection"], size: 672 });
+      // venn.sortAreas(venn_div, $("[data-venn-sets='Current Selection']"));
       $(".venn-circle").each(function () {
         if ("Current Selection" != $(this).attr("data-venn-sets")) {
           $(this).addClass("hover_fade_circle");
@@ -1568,7 +1571,7 @@ function add_hover_venn_statement() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  tooltip = d3.select(".venn").append("div").attr("class", "venntooltip");
+  // tooltip = d3.select(".venn").append("div").attr("class", "venntooltip");
   init_buttons();
   init_other_db2mask();
   g = new Graph(0, "hpgc", "human primordial germ cells");

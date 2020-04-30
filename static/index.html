@@ -13,6 +13,7 @@
       rel="stylesheet"
     />
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <!-- <script src="jquery.textfill.min.js"></script> -->
 
     <link href="stylesheets/application-23aba87b.css" rel="stylesheet" />
     <link href="stylesheets/graphs.css" rel="stylesheet" />
@@ -53,43 +54,45 @@
         </p>
       </div>
       <div class="venn" id="venn-wrapper">
-        <p style="font-size: 120%;">
-          The
-          <span id="venn_statement_current_selection"
-            ><b>current selection</b></span
-          >
-          is the set of genes that are currently selected in the<br />
-          <span id="operator_statement"
-            >(<span
-              class="venn_statement"
-              id_name="hpgc"
-              id="venn_statement_hpgc"
-              >Human PGC</span
+        <div class="venn_statement_wrapper">
+          <p style="font-size: 120%;">
+            The
+            <span id="venn_statement_current_selection"
+              ><b>current selection</b></span
             >
-            <span id="pgc_operator_span">
-              <select id="pgc_operator">
-                <option value="OR">or</option>
-                <option value="AND">and</option>
-              </select>
+            is the set of genes that are currently selected in the<br />
+            <span id="operator_statement"
+              >(<span
+                class="venn_statement"
+                id_name="hpgc"
+                id="venn_statement_hpgc"
+                >Human PGC</span
+              >
+              <span id="pgc_operator_span">
+                <select id="pgc_operator">
+                  <option value="OR">or</option>
+                  <option value="AND">and</option>
+                </select>
+              </span>
+              <span
+                id="venn_statement_pgclc"
+                class="venn_statement"
+                id_name="pgclc"
+                >PGC-like cell</span
+              >
+              histogram)
             </span>
-            <span
-              id="venn_statement_pgclc"
-              class="venn_statement"
-              id_name="pgclc"
-              >PGC-like cell</span
+            and the
+            <span id="venn_statement_gtex" class="venn_statement" id_name="gtex"
+              >GTEx</span
             >
-            histogram)
-          </span>
-          and the
-          <span id="venn_statement_gtex" class="venn_statement" id_name="gtex"
-            >GTEx</span
-          >
-          histogram and the
-          <span id="venn_statement_tcga" class="venn_statement" id_name="tcga"
-            >TCGA</span
-          >
-          histogram
-        </p>
+            histogram and the
+            <span id="venn_statement_tcga" class="venn_statement" id_name="tcga"
+              >TCGA</span
+            >
+            histogram
+          </p>
+        </div>
       </div>
       <div id="graph-0" class="graph graph-0"></div>
       <div id="graph-1" class="graph graph-1"></div>
