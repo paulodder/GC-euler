@@ -1454,7 +1454,7 @@ function update_venn() {
   // venn_div.datum(new_array_set_sizes).call(vennChart);
   // vennChart = venn.VennDiagram(subset_name2size);
   let parent_div_info = d3.select(".venn").node().getBoundingClientRect(),
-    desired_size = [0.65 * parent_div_info.height, 0.8 * parent_div_info.width];
+    desired_size = [0.6 * parent_div_info.height, 0.8 * parent_div_info.width];
   // .getElementById(".venn")
   // .getBoundingClientRect(),
 
@@ -1469,7 +1469,7 @@ function update_venn() {
 
   // vd.call();
   // venn_div.datum(new_array_set_sizes).call(vennChart);
-  // add_tooltips();
+  add_tooltips();
   // var new_array_set_sizes = [
   //   // Variable
   //   { sets: setAbbrevs["1"], size: set_sizes[0] },
@@ -1497,12 +1497,13 @@ function update_venn() {
 }
 
 function add_tooltips() {
-  var tooltip = d3.select(".venntooltip");
+  var tooltip = d3.select(".venntooltip").style("display", "none");
   // add listeners to all the groups to display tooltip on mouseover
   venn_div = d3.select(".venn");
   venn_div
     .selectAll("g")
     .on("mouseover", function (d, i) {
+      tooltip.style("display", "inline");
       // sort all the areas relative to the current item
       venn.sortAreas(venn_div, d);
 
@@ -1515,7 +1516,7 @@ function add_tooltips() {
       selection
         .select("path")
         .style("stroke-width", 3)
-        .style("fill-opacity", d.sets.length == 1 ? 0.4 : 0.1)
+        .style("fill-opacity", d.sets.length == 1 ? 0.6 : 0.1)
         .style("stroke-opacity", 1);
     })
 
@@ -1535,7 +1536,7 @@ function add_tooltips() {
         .duration(400)
         .select("path")
         .style("stroke-width", 0)
-        .style("fill-opacity", d.sets.length == 1 ? 0.25 : 0.0)
+        .style("fill-opacity", d.sets.length == 1 ? 0.4 : 0.0)
         .style("stroke-opacity", 0);
     });
 }
@@ -1584,7 +1585,11 @@ function add_hover_venn_statement() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  // tooltip = d3.select(".venn").append("div").attr("class", "venntooltip");
+  tooltip = d3
+    .select(".venn")
+    .append("div")
+    .attr("class", "venntooltip")
+    .style("display", "none");
   init_buttons();
   init_other_db2mask();
   g = new Graph(0, "hpgc", "human primordial germ cells");
