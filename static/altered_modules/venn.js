@@ -1384,6 +1384,7 @@ centers the diagram in the available space at the same time */
       colourScheme = [
         "#6a3d9a",
         "#ff7f00",
+        "#8c564b",
         "#b15928",
         "#66c2a5",
         "#fc8d62",
@@ -1533,7 +1534,7 @@ centers the diagram in the available space at the same time */
           .style("fill", function (d) {
             return colours(d.sets);
           })
-          .style("fill-opacity", ".25");
+          .style("fill-opacity", ".4");
 
         enterText.style("fill", function (d) {
           return d.sets.length == 1 ? colours(d.sets) : "#444";
