@@ -316,6 +316,10 @@ class Graph {
     this.tissue_name = tissue_name;
     this.graph_ind = graph_ind;
     this.wrapper_selector = `.graph-${graph_ind}`;
+    this.svg_wrapper = d3
+      .select(this.wrapper_selector)
+      .append("div")
+      .classed("svg-wrapper", true);
     this.wrapper = d3
       .select(this.wrapper_selector)
       .attr("id_name", this.id_name);
@@ -467,14 +471,8 @@ class Graph {
 
   // get size of wrapper
   get_size() {
-    // var wrapper_info = this.wrapper.node().getBoundingClientRect();
-
-    var wrapper_info = this.wrapper.node().getBoundingClientRect();
-    return [0.7 * wrapper_info.height, wrapper_info.width];
-    // return [
-    //   0.7 * document.documentElement.clientHeight * (1 / 4),
-    //   document.documentElement.clientWidth * (9 / (8 + 9)),
-    // ];
+    var wrapper_info = this.svg_wrapper.node().getBoundingClientRect();
+    return [wrapper_info.height, wrapper_info.width];
   }
 
   scale_gridlines() {
@@ -590,13 +588,13 @@ class Graph {
     console.log("size", size);
     this.height = size[0];
     this.width = size[1];
-    this.svg.attr("width", "100%").attr("height", this.height);
+    this.svg.attr("width", "100%").attr("height", "100%");
 
     this.margin = {
       left: 0.065 * this.width,
       right: 0.05 * this.width,
       top: 0.05 * this.height,
-      bottom: 0.1 * this.height,
+      bottom: 0.15 * this.height,
     };
     // width = size[0],
     // height = size[1];
@@ -694,7 +692,7 @@ class Graph {
       .attr("y", `${0.6 * this.margin.bottom}px`)
       // .attr("y", `${-0.9 * (0.5 * this.margin.bottom)}px`)
       .style("text-anchor", "center")
-      .style("font-size", `${0.5 * this.margin.bottom}px`);
+      .style("font-size", `${0.5 * this.margin.bottom}`);
     console.log("HEREEE", `${-0.9 * (0.5 * this.margin.bottom)}`);
     console.log("HEREEE", 0.5 * this.margin.bottom);
     //   // .attr("transform", "rotate(270)")
@@ -798,11 +796,11 @@ class Graph {
     var max_expr = d3.max(this.d3_data, function (d) {
       return d.expr;
     });
-    this.yAxis.tickValues(
-      d3
-        .range(0, Math.ceil(max_expr / 100) * 100, 100)
-        .concat(Math.ceil(max_expr / 100) * 100 + 100)
-    );
+    this.yAxis; // tickValues(
+    //   d3
+    //     .range(0, Math.ceil(max_expr / 100) * 100, 100)
+    //     .concat(Math.ceil(max_expr / 100) * 100 + 100)
+    // )
 
     this.yAxis.tickValues(
       d3
@@ -1023,7 +1021,7 @@ class Graph {
   set_x_gridlines() {
     this.x_gridlines = d3
       .axisBottom(this.x)
-      .tickValues(d3.range(...this.domain, X_IV)) // perhaps dynamically change
+      // .tickValues(d3.range(...this.domain, X_IV)) // perhaps dynamically change
       .tickSizeOuter(0)
       .tickFormat("");
 
@@ -1034,7 +1032,7 @@ class Graph {
   set_y_gridlines() {
     this.y_gridlines = d3
       .axisLeft(this.y)
-      .tickValues(d3.range(0, this.max_expr, 20)) // perhaps dynamically change
+      // .tickValues(d3.range(0, this.max_expr, 20)) // perhaps dynamically change
       .tickSizeOuter(0)
       .tickFormat("");
 
@@ -1051,10 +1049,8 @@ class Graph {
   }
 
   set_xAxis() {
-    this.xAxis = d3
-      .axisBottom(this.x)
-      .tickFormat(d3.format(".1f"))
-      .tickValues(d3.range(this.domain[0], this.domain[1], 0.4));
+    this.xAxis = d3.axisBottom(this.x).tickFormat(d3.format(".1f"));
+    // .tickValues(d3.range(this.domain[0], this.domain[1], 0.4));
 
     // add it as well
     this.svg.append("g").attr("class", "x axis").attr("id", "x-axis");
@@ -1118,14 +1114,14 @@ class Graph {
   }
 
   set_svg() {
-    this.svg = d3
-      .select(this.wrapper_selector)
+    this.svg = this.svg_wrapper //  = d3
+      // .select(this.wrapper_selector)
       // .select(`#expr_${this.id_name}`)
       // .attr("width", WIDTH + margin.left + margin.right)
       // .attr("height", height + margin.bottom + margin.top)
       .append("svg")
       .attr("width", "100%")
-      // .attr("height", "65%")
+      .attr("height", "65%")
       .attr("id_name", this.id_name)
       .classed("graph-svg", true);
     // .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
@@ -1182,14 +1178,31 @@ class Graph {
           end_idx =
             ((current_range_selection[1] - self.margin.left) /
               (self.width - (self.margin.left + self.margin.right))) *
-            self.d3_data.length;
-        if (self.x.invert(start_idx) < current_range_selection[0]) {
-          start_idx += 1;
-        }
-        if (self.x.invert(end_idx) > current_range_selection[1]) {
-          end_idx -= 1;
-        }
+              self.d3_data.length +
+            1;
+        console.log(self.id_name, start_idx, end_idx);
+
+        // console.log(
+        //   "corresponding x_value",
+        //   self.x.invert(current_range_selection[0]),
+        //   self.d3_data[start_idx]
+        // );
+        // if (
+        //   self.x.invert(current_range_selection[0]) <
+        //   self.d3_data[start_idx]["x_value"]
+        // ) {
+        //   start_idx += 1;
+        // }
+        console.log("after startidx", start_idx);
+        // if (self.x.invert(end_idx) > current_range_selection[1]) {
+        //   end_idx -= 1;
+        // }
         var selected_data = self.d3_data.slice(start_idx, end_idx);
+        console.log(
+          "selected endpoints",
+          selected_data[0],
+          selected_data[selected_data.length - 1]
+        );
         // selected_data[0]["x_value"] = self.x.invert(current_range_selection[0]);
         // selected_data[selected_data.length - 1]["x_value"] = self.x.invert(
         //   current_range_selection[1]
