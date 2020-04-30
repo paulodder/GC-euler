@@ -35,6 +35,7 @@ $WIDTH: 750px;
     background: white;
     display: flex;
     align-items: center;
+
     // vertically align in center
 
     justify-content: center;
@@ -48,6 +49,7 @@ $WIDTH: 750px;
 
     height: 100vh;
 
+
     // hide this element
     // overflow: scroll;;
     @media (min-width: 500px) {
@@ -55,16 +57,19 @@ $WIDTH: 750px;
     }
 }
 
-/* body { */
+body {
+    overflow: hidden;
 /*     height: 100vh; */
 /*     margin: 0px; */
-/* } */
+}
 
 
 #graphs {
     width: 100vw;
     height: 100vh;
-
+    visibility: hidden;
+    // width: 0;
+    // heigth: 0;
     // styles... (scroll down)
     background: white;
 
@@ -212,7 +217,7 @@ $WIDTH: 750px;
 
     // the relevant part
 
-    $elems: ('info', 'venn', 'graph-0', 'graph-1', 'graph-2', 'graph-3');
+    $elems: ('info', 'venn', 'graph-0', 'graph-1', 'graph-2', 'graph-3' 'credits');
     @each $elem in append($elems, 'buttons') {
         // define grid area
         .#{$elem} {
@@ -236,7 +241,8 @@ $WIDTH: 750px;
 
     // }
 
-    @media (min-width: 500px) and (max-width: 999px) {
+        @media (min-width: 500px) and (max-width: 999px) {
+            visibility: visible;
         display: grid;
         .info {
             overflow-y: scroll;
@@ -244,9 +250,10 @@ $WIDTH: 750px;
 
         overflow-y: scroll;
         display: grid;
-        grid-template-rows: 30vw 50vw 25vw 25vw 25vw 25vw;
-        grid-template-columns: 1fr;
-        grid-template-areas: "info" "venn" "graph-0" "graph-1" "graph-2" "graph-3";
+        grid-template-rows: 30vw 50vw 25vw 25vw 25vw 25vw 3vw;
+        grid-template-columns: 100vw;
+        // overflow-y: scroll;
+        grid-template-areas: "info" "venn" "graph-0" "graph-1" "graph-2" "graph-3" "credits";
 
         .venn {
             grid-area: venn;
@@ -343,7 +350,8 @@ $WIDTH: 750px;
     /* } */
 
     // also, only overwrites because it sits below the code above
-    @media (min-width: 1000px) {
+        @media (min-width: 1000px) {
+            visibility: visible;
 
         .venn {
             border: 1px solid grey;
@@ -392,7 +400,7 @@ $WIDTH: 750px;
             grid-area: info;
             // text-align: center;
         }
-        grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr; // all equal, but if you explicitly
+        grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 3vh; // all equal, but if you explicitly
         // define them you prevent the upper and lower graph to become
         // disproportionally sized
         grid-template-columns: 8fr 9fr;
@@ -408,7 +416,8 @@ $WIDTH: 750px;
                 "venn graph-2"
                 "venn graph-3"
                 "venn graph-3"
-                "venn graph-3";
+                "venn graph-3"
+                "credits credits";
 
 
 
@@ -475,3 +484,10 @@ $WIDTH: 750px;
 /* } */
 
 /* .curre */
+
+footer {
+    font-size: 15;
+    * {
+        font-size: 100%;
+    }
+}
