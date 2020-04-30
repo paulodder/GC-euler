@@ -1443,7 +1443,7 @@ centers the diagram in the available space at the same time */
           return labels[d.sets];
         }
         if (d.sets.length == 1) {
-          return "" + d.sets[0];
+          return "" + d.sets[0] + ` (n = ${d.size})`;
         }
         if (d.sets.length > 1) {
           // console.log(d.sets.join(','))

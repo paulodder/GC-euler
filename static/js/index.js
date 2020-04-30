@@ -1397,15 +1397,11 @@ function get_intersection_idxs() {
 function init_other_db2mask() {
   $.getJSON(`data/CT.json`, "").done(function (data) {
     other_db2mask["CT"] = data;
-    circle_id2fancy_name["CT"] = `CT database (n=${math.sum(
-      other_db2mask["CT"]
-    )})`;
+    circle_id2fancy_name["CT"] = `CT database`;
   });
   $.getJSON(`data/brug2017.json`, "").done(function (data) {
     other_db2mask["brug2017"] = data;
-    circle_id2fancy_name["brug2017"] = `Bruggeman et al. 2017 (n=${math.sum(
-      other_db2mask["brug2017"]
-    )})`;
+    circle_id2fancy_name["brug2017"] = `Bruggeman et al. 2017`;
     circle_id2fancy_name["current_selection"] = "Current Selection";
   });
 }
