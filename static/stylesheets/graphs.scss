@@ -213,6 +213,11 @@ $WIDTH: 750px;
   // element-specific properties
   .info {
       overflow-y: scroll;
+      // text-align: center;
+      * {
+          margin: 3%;
+      }
+
   }
 
   // minimum width required for this to look okay
