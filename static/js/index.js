@@ -1,4 +1,3 @@
-console.log("HER");
 var g;
 var id_name2graph = {};
 var tooltip;
@@ -119,7 +118,6 @@ function potentially_cross_status(id_name, current_domain_selection) {
   var ubound_visible = !(current_domain_selection[1] >= MAX_X_DOMAIN),
     lbound_visible = !(current_domain_selection[0] <= MIN_X_DOMAIN);
   if (ubound_visible) {
-    // console.log("upper bound visible");
     d3.selectAll(`.ubound_${id_name}`).attr("crossed-out", "false");
   } else {
     d3.selectAll(`.ubound_${id_name}`).attr("crossed-out", "true");
@@ -238,7 +236,6 @@ function init_buttons() {
 
   d3.select("#reset_selections").on("click", function () {
     Object.keys(id_name2graph).forEach(function (id_name) {
-      //tmpconsole.logg(id_name);
       var graph = id_name2graph[id_name];
       //tmpconsole.logg(id_name2default_range[id_name].map(graph.x));
       d3.select(`#brush_${id_name}`).call(
@@ -319,7 +316,7 @@ class Graph {
     this.svg_wrapper = d3
       .select(this.wrapper_selector)
       .append("div")
-      .classed("svg-wrapper", true);
+      .classed("svg_wrapper", true);
     this.wrapper = d3
       .select(this.wrapper_selector)
       .attr("id_name", this.id_name);
@@ -1414,7 +1411,6 @@ function init_other_db2mask() {
 }
 
 function update_venn() {
-  console.log("UPDATE");
   var inters_idxs = get_intersection_idxs();
   if (inters_idxs == false) {
     console.log("Postponing update of venn diagram. Waiting for charts");
@@ -1453,19 +1449,21 @@ function update_venn() {
   );
   // venn_div.datum(new_array_set_sizes).call(vennChart);
   // vennChart = venn.VennDiagram(subset_name2size);
-  let parent_div_info = d3.select(".venn").node().getBoundingClientRect(),
-    desired_size = [0.6 * parent_div_info.height, 0.8 * parent_div_info.width];
+  let parent_div_info = d3
+      .select(".venn_svg_wrapper")
+      .node()
+      .getBoundingClientRect(),
+    desired_size = [0.9 * parent_div_info.height, 0.9 * parent_div_info.width];
   // .getElementById(".venn")
   // .getBoundingClientRect(),
 
-  console.log("parent_div_info", desired_size);
+  // console.log("parent_div_info", desired_size);
   // parent_div_info.se
-  let venn_div = d3.select(".venn");
+  let venn_svg = d3.select(".venn_svg_wrapper");
   // var vd = venn_div
-  venn_div
+  venn_svg
     .datum(new_array_set_sizes)
     .call(venn.VennDiagram(subset_name2size, desired_size));
-  d3.select(".venn").select("svg"); // .attr("height", "80%").attr("width", "80%")
 
   // vd.call();
   // venn_div.datum(new_array_set_sizes).call(vennChart);
@@ -1622,6 +1620,7 @@ document.addEventListener("DOMContentLoaded", () => {
     Object.keys(id_name2graph).forEach(function (id_name) {
       redraw(id_name);
     });
+    // redraw("hpgc");
   });
 
   $("#pgc_operator")
@@ -1629,6 +1628,5 @@ document.addEventListener("DOMContentLoaded", () => {
       update_venn();
     })
     .trigger("change");
-  // $(window).trigger("resize");
   add_hover_venn_statement();
 });

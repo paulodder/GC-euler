@@ -49,6 +49,7 @@ $WIDTH: 750px;
     height: 100vh;
 
     // hide this element
+    // overflow: scroll;;
     @media (min-width: 500px) {
         display: none;
     }
@@ -61,313 +62,358 @@ $WIDTH: 750px;
 
 
 #graphs {
-  // styles... (scroll down)
+    width: 100vw;
+    height: 100vh;
+
+    // styles... (scroll down)
     background: white;
 
-
-
-  .buttons {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    max-height: 100vh;
-    margin-right: 20px;
-  }
-
-  .button {
-    flex-grow: 1;
-    background: lightblue;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    @extend p !optional;
-    /* @extend p; */
-    color: black;
-    cursor: pointer;
-  }
-
-  .venn {
-      border: 1px solid grey;
-  }
-
-
-  .graph {
-      display: grid;
-      .title {
-          text-align: center;
-          grid-area: title
-      }
-
-      .selection_statement {
-          // display: grid;
-        /* margin-top: 0px; */
-        /* width: 80%; */
-        /* min-height: 20%; */
-        /* margin: 0px; */
-        /* margin-bottom: 2px; */
-          /* /\* : 20%; *\/ */
-          // align-items: flex-start;
-          margin: auto;
-          max-width: 90%;
-          text-align: center;
-          grid-area: selection_statement;
-          font-size: 90%;
-          color: black;
-          *
-          {
-              color: black;
-              font-size: 90%;
-          }
-      }
-
-      .svg-wrapper {
-          grid-area: graph;
-          height: 100%;
-          width: 100%;
-          // display: flex;
-          // flex-direction: column;
-          justify-content: space-around;
-          svg {
-
-              .grid {
-                  stroke: grey;
-                  opacity: 0.1;
-                  stroke-width: 0.5;
-              }
-              rect.selection {
-                  opacity: 0;
-              }
-          }
-      }
-
-      grid-template-columns: 1fr;
-      grid-template-rows: 1fr 7fr 2fr;
-      grid-template-areas: "title"
-                               "graph"
-                               "selection_statement";
-
-
-      /* flex-direction: column; */
-      /* justify-content: space-between; */
-      /* .title { */
-      /*     order: -1; */
-
-      /* } */
-    padding: 0 0;
-    border: 2px solid #444;
-
-    /* display: flex; */
-    /* flex-direction: column; */
-    /* align-items: space-between; */
-    /* justify-content: space-between; */
-    /* justify-content: space-around; */
-    /* .title { */
-    /*     width: 1000; */
-    /* } */
-
-
-    /* display: flex; */
-    /* /\* justify-content: center; *\/ */
-    /* align-items: space-between; */
-    /* flex-direction: column; */
-
-    // &.red {
-    //   background: lighten(red, 30);
+    // .buttons {
+    //   display: flex;
+    //   flex-direction: column;
+    //   align-items: stretch;
+    //   max-height: 100vh;
+    //   margin-right: 20px;
     // }
-    // &.green {
-    //   background: lighten(green, 30);
+
+    // .button {
+    //   flex-grow: 1;
+    //   background: lightblue;
+    //   display: flex;
+    //   align-items: center;
+    //   justify-content: center;
+    //   @extend p !optional;
+    //   /* @extend p; */
+    //   color: black;
+    //   cursor: pointer;
     // }
-    // &.yellow {
-    //   background: lighten(yellow, 30);
-    // }
-    // &.purple {
-    //   background: lighten(purple, 30);
-    // }
-  }
 
-  // remove horiz border between hpgc and pgclc
-  .graph-0 {
-      border-bottom: 2px dashed grey;
 
-  }
-  .graph-1 {
-      border-top: 2px dashed grey;
-  }
 
-  #venn-wrapper {
-      padding-bottom: 0%; // what does this do? doesn't seem to have effect
-      /* display: flex; */
-      /* justify-content: space-between; */
-      /* flex-direction: column; */
-      text-align: center;
-      background: white;
-      /* svg { */
-      /*     width: 100%; */
-      /*     height: 100%; */
-      /* } */
 
-  }
 
-  // the relevant part
-
-  $elems: ('info', 'venn', 'graph-0', 'graph-1', 'graph-2', 'graph-3');
-  @each $elem in append($elems, 'buttons') {
-      // define grid area
-      .#{$elem} {
-      grid-area: #{$elem};
-    }
-  }
-
-  width: 100vw;
-  height: 100vh;
-
-  display: none;
-
-  // element-specific properties
-  .info {
-      overflow-y: scroll;
-      // text-align: center;
-      * {
-          margin: 3%;
-      }
-
-  }
-
-  // minimum width required for this to look okay
-  @media (min-width: 500px) {
-    display: grid;
-  }
-
-  @media (min-width: 500px) and (max-width: 799px) {
-    @each $elem in $elems {
-      .#{$elem} {
-        display: none;
-      }
-
-      // with this class, it will display $elem next to the buttons
-      &.display-#{$elem} {
-        .#{$elem} {
-          display: initial;
+    .graph {
+        display: grid;
+        // width: 100%;
+        .title {
+            text-align: center;
+            grid-area: title
         }
-        grid-template-columns: 3fr 10fr;
-        grid-template-areas: "buttons #{$elem}";
-      }
-    }
-  }
 
-  // this overwrites the code above because it is defined below that code
-  @media (min-width: 800px) {
-    .buttons {
-      display: none; // do not show buttons if screen width larger than 800px
-    }
+        .selection_statement {
+            // display: grid;
+            /* margin-top: 0px; */
+            /* width: 80%; */
+            /* min-height: 20%; */
+            /* margin: 0px; */
+            /* margin-bottom: 2px; */
+            /* /\* : 20%; *\/ */
+            // align-items: flex-start;
+            margin: auto;
+            max-width: 90%;
+            text-align: center;
+            grid-area: selection_statement;
+            font-size: 90%;
+            color: black;
+            *
+            {
+                color: black;
+                font-size: 90%;
+            }
+        }
 
-    // removing these does not seem to make a difference?
-    grid-template-rows: 2fr 3fr 3fr 3fr 3fr; // defines scale along rows
-    grid-template-columns: 6fr 3fr; // defines ratio of columns
+        .svg_wrapper {
+            grid-area: graph;
+            height: 100%;
+            width: 100%;
+            // display: flex;
+            // flex-direction: column;
+            justify-content: space-around;
+            svg {
 
-    grid-template-areas:
-      "info info"
-      "venn graph-0"
-      "venn graph-1"
-      "venn graph-2"
-      "venn graph-3";
-  }
+                .grid {
+                    stroke: grey;
+                    opacity: 0.1;
+                    stroke-width: 0.5;
+                }
+                rect.selection {
+                    opacity: 0;
+                }
+            }
+        }
 
-  /* @media (min-width: 500px) { */
-  /*     grid-template-rows: 1fr; // all equal, but if you explicitly */
-  /*   // define them you prevent the upper and lower graph to become */
-  /*     // disproportionally sized */
-  /*     grid-template-columns: 1fr; */
-  /*     grid-template-areas: */
-  /*       "info" */
-  /*           "graph-0" */
-  /*           "graph-1" */
-  /*           "graph-2" */
-  /*           "graph-3" */
-  /*           "venn"; */
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr 7fr 2fr;
+        grid-template-areas: "title"
+                                 "graph"
+                                 "selection_statement";
 
 
-  /* } */
-
-  // also, only overwrites because it sits below the code above
-  @media (min-width: 1000px) {
-      grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr; // all equal, but if you explicitly
-    // define them you prevent the upper and lower graph to become
-      // disproportionally sized
-      grid-template-columns: 8fr 9fr;
-      grid-template-areas:
-        "info graph-0"
-            "info graph-0"
-            "info graph-0"
-            "info graph-1"
-            "venn graph-1"
-            "venn graph-1"
-            "venn graph-2"
-            "venn graph-2"
-            "venn graph-2"
-            "venn graph-3"
-            "venn graph-3"
-            "venn graph-3";
-
-      .venn {
-
-          .venn_buttons {
-              grid-area: venn_buttons;
-              display: flex;
-              justify-content: space-between;
-
-          }
-          .venn_statement_wrapper {
-              grid-area: venn_statement;
-              max-height: 20%;
-              font-size: 90%;
-              * {
-                  font-size: 90%;
-              }
-          }
-          svg {
-              grid-area: venn_svg;
-              overflow-x: hide;
-              margin-left: auto;
-              margin-right: auto;
-              overflow-y: hide;
-              // margin: auto;
-          }
-          display: grid;
-          grid-template-rows: 0.05fr 0.2fr 0.65fr; // all equal, but if you explicitly
-    // define them you prevent the upper and lower graph to become
-          // disproportionally sized
-
-          grid-template-columns: 1fr;
-          grid-template-areas: "venn_buttons"
-                                   "venn_statement"
-                                   "venn_svg";
-          text-align: center;
-          /* "info graph-1" */
-            /* "venn graph-1" */
-            /* "venn graph-1" */
-            /* "venn graph-2" */
-            /* "venn graph-2" */
-            /* "venn graph-2" */
-            /* "venn graph-3" */
-            /* "venn graph-3" */
-            /* "venn graph-3"; */
         /* flex-direction: column; */
-        /* .venn-buttons { */
-        /*     display: flex; */
-        /*     /\* flex-direction: row; *\/ */
-        /*     justify-content: space-between; */
-        /*     align-items: flex-start; */
+        /* justify-content: space-between; */
+        /* .title { */
         /*     order: -1; */
 
         /* } */
+        padding: 0 0;
+        border: 2px solid #444;
+
+        /* display: flex; */
+        /* flex-direction: column; */
+        /* align-items: space-between; */
+        /* justify-content: space-between; */
+        /* justify-content: space-around; */
+        /* .title { */
+        /*     width: 1000; */
+        /* } */
 
 
+        /* display: flex; */
+        /* /\* justify-content: center; *\/ */
+        /* align-items: space-between; */
+        /* flex-direction: column; */
 
-        /* grid-template-rows: 1fr; */
+        // &.red {
+        //   background: lighten(red, 30);
+        // }
+        // &.green {
+        //   background: lighten(green, 30);
+        // }
+        // &.yellow {
+        //   background: lighten(yellow, 30);
+        // }
+        // &.purple {
+        //   background: lighten(purple, 30);
+        // }
     }
 
-  }
+    // remove horiz border between hpgc and pgclc
+    .graph-0 {
+        border-bottom: 2px dashed grey;
+
+    }
+    .graph-1 {
+        border-top: 2px dashed grey;
+    }
+
+    #venn-wrapper {
+        padding-bottom: 0%; // what does this do? doesn't seem to have effect
+        /* display: flex; */
+        /* justify-content: space-between; */
+        /* flex-direction: column; */
+        // text-align: center;
+        background: white;
+        /* svg { */
+        /*     width: 100%; */
+        /*     height: 100%; */
+        /* } */
+
+    }
+
+    // the relevant part
+
+    $elems: ('info', 'venn', 'graph-0', 'graph-1', 'graph-2', 'graph-3');
+    @each $elem in append($elems, 'buttons') {
+        // define grid area
+        .#{$elem} {
+            grid-area: #{$elem};
+        }
+    }
+
+
+    // display: none;
+
+    // element-specific properties
+    .info * {
+        margin: 3%;
+    }
+
+    // minimum width required for this to look okay
+        display: grid;
+
+    // @media (min-width: 500px) {
+    //     display: grid;
+
+    // }
+
+    @media (min-width: 500px) and (max-width: 999px) {
+        display: grid;
+        .info {
+            overflow-y: scroll;
+        }
+
+        overflow-y: scroll;
+        display: grid;
+        grid-template-rows: 30vw 50vw 25vw 25vw 25vw 25vw;
+        grid-template-columns: 1fr;
+        grid-template-areas: "info" "venn" "graph-0" "graph-1" "graph-2" "graph-3";
+
+        .venn {
+            grid-area: venn;
+            border: 1px solid grey;
+            .venn_buttons {
+                grid-area: venn_buttons;
+                display: flex;
+                justify-content: space-between;
+                // align-items: flex-start;
+
+            }
+            .venn_statement_wrapper {
+                grid-area: venn_statement;
+                max-height: 20%;
+                font-size: 90%;
+                * {
+                    font-size: 90%;
+                }
+            }
+            .venn_svg_wrapper {
+                grid-area: venn_svg;
+                display: flex;
+                justify-content: space-around;
+                height: 100%;
+                width: 100%;
+                // height: 300%;
+                // svg {
+                //     height: 200%;
+                //     width: 100%;
+                // }
+            }
+            display: grid;
+            grid-template-rows: 10fr 85fr 5fr; // all equal, but if you explicitly
+            // define them you prevent the upper and lower graph to become
+            // disproportionally sized
+
+            grid-template-columns: 1fr;
+            grid-template-areas: "venn_statement"
+                                     "venn_svg"
+                                     "venn_buttons";
+            text-align: center;
+            // height: 200%;
+
+        }
+
+        // @each $elem in $elems {
+        //   .#{$elem} {
+        //     display: none;
+        //   }
+
+        //   // with this class, it will display $elem next to the buttons
+        //   &.display-#{$elem} {
+        //     .#{$elem} {
+        //       display: initial;
+        //     }
+        //     grid-template-columns: 3fr 10fr;
+        //     grid-template-areas: "buttons #{$elem}";
+        //   }
+        // }
+    }
+
+    // this overwrites the code above because it is defined below that code
+    // @media (min-width: 800px) {
+    //   // .buttons {
+    //   //   display: none; // do not show buttons if screen width larger than 800px
+    //   // }
+
+    //   // removing these does not seem to make a difference?
+    //   grid-template-rows: 2fr 3fr 3fr 3fr 3fr; // defines scale along rows
+    //   grid-template-columns: 6fr 3fr; // defines ratio of columns
+
+    //   grid-template-areas:
+    //     "info info"
+    //     "venn graph-0"
+    //     "venn graph-1"
+    //     "venn graph-2"
+    //     "venn graph-3";
+    // }
+
+    /* @media (min-width: 500px) { */
+    /*     grid-template-rows: 1fr; // all equal, but if you explicitly */
+    /*   // define them you prevent the upper and lower graph to become */
+    /*     // disproportionally sized */
+    /*     grid-template-columns: 1fr; */
+    /*     grid-template-areas: */
+    /*       "info" */
+    /*           "graph-0" */
+    /*           "graph-1" */
+    /*           "graph-2" */
+    /*           "graph-3" */
+    /*           "venn"; */
+
+
+    /* } */
+
+    // also, only overwrites because it sits below the code above
+    @media (min-width: 1000px) {
+
+        .venn {
+            border: 1px solid grey;
+            .venn_buttons {
+                grid-area: venn_buttons;
+                display: flex;
+                justify-content: space-between;
+
+            }
+            .venn_statement_wrapper {
+                grid-area: venn_statement;
+                max-height: 20%;
+                font-size: 90%;
+                * {
+                    font-size: 90%;
+                }
+            }
+            .venn_svg_wrapper {
+                // height: 70%;
+                // width: 100%;
+                grid-area: venn_svg;
+                display: flex;
+                justify-content: space-around;
+                // overflow-x: hide;
+                // margin-left: auto;
+                // margin-right: auto;
+                // overflow-y: hide;
+                // margin: auto;
+            }
+            display: grid;
+            grid-template-rows: 0.05fr 0.2fr 1fr; // all equal, but if you explicitly
+            // define them you prevent the upper and lower graph to become
+            // disproportionally sized
+
+            grid-template-columns: 1fr;
+            grid-template-areas: "venn_buttons"
+                                     "venn_statement"
+                                     "venn_svg";
+            text-align: center;
+
+        }
+
+
+        .info {
+            overflow-y: scroll;
+            grid-area: info;
+            // text-align: center;
+        }
+        grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr; // all equal, but if you explicitly
+        // define them you prevent the upper and lower graph to become
+        // disproportionally sized
+        grid-template-columns: 8fr 9fr;
+        grid-template-areas:
+            "info graph-0"
+                "info graph-0"
+                "info graph-0"
+                "info graph-1"
+                "venn graph-1"
+                "venn graph-1"
+                "venn graph-2"
+                "venn graph-2"
+                "venn graph-2"
+                "venn graph-3"
+                "venn graph-3"
+                "venn graph-3";
+
+
+
+    }
+
 
 }
 
@@ -380,7 +426,7 @@ $WIDTH: 750px;
     filter: blur(4px);
     // transition: opacity 0.6s cubic-bezier(0.33, 1, 0.68, 1)
     ;
-                          /* opacity */
+    /* opacity */
 }
 
 [crossed-out="true"] {
@@ -402,20 +448,20 @@ $WIDTH: 750px;
 #venn_statement_current_selection {
     /* text-decoration: underline overline; */
     background: rgba($current_selection_color,$operator_statement_highligh_opacity)
-    /* color: #6a3d9a */
+                    /* color: #6a3d9a */
 }
 
 .venntooltip {
-  position: absolute;
-  text-align: center;
-  width: 128px;
-  height: 16px;
-  background: #333;
-  color: #ddd;
-  padding: 2px;
-  border: 0px;
-  border-radius: 8px;
-  opacity: 0;
+    position: absolute;
+    text-align: center;
+    width: 128px;
+    height: 16px;
+    background: #333;
+    color: #ddd;
+    padding: 2px;
+    border: 0px;
+    border-radius: 8px;
+    opacity: 0;
 }
 
 
