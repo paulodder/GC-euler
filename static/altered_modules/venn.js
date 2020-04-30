@@ -1736,6 +1736,7 @@ centers the diagram in the available space at the same time */
         .selectAll("tspan")
         .attr("x", x)
         .attr("y", y)
+        .style("font-size", "90%")
         .attr("dy", function (d, i) {
           return initial + i * lineHeight + "em";
         });
