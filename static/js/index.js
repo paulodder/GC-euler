@@ -327,7 +327,7 @@ class Graph {
       //tmpconsole.logg("done");
       self.set_domain(); // set x domain
       self.parse_data(exprs);
-      console.log("setting");
+      // console.log("setting")
       // self.set_scales();
       self.set_svg(); // add svg element to div
       self.set_title();
@@ -582,7 +582,6 @@ class Graph {
   set_scales() {
     // get parent size
     var size = this.get_size();
-    console.log("size", size);
     this.height = size[0];
     this.width = size[1];
     this.svg.attr("width", "100%").attr("height", "100%");
@@ -595,7 +594,6 @@ class Graph {
     };
     // width = size[0],
     // height = size[1];
-    // console.log(this.get_size(), this.wrapper.node().getBoundingClientRect());
     // Set ranges accordingly
     this.x.range([
       this.margin.left,
@@ -690,8 +688,6 @@ class Graph {
       // .attr("y", `${-0.9 * (0.5 * this.margin.bottom)}px`)
       .style("text-anchor", "center")
       .style("font-size", `${0.5 * this.margin.bottom}`);
-    console.log("HEREEE", `${-0.9 * (0.5 * this.margin.bottom)}`);
-    console.log("HEREEE", 0.5 * this.margin.bottom);
     //   // .attr("transform", "rotate(270)")
   }
 
@@ -712,15 +708,12 @@ class Graph {
   }
 
   draw() {
-    console.log("HER");
     this.set_scales();
     this.draw_axes();
     this.draw_brush();
     this.draw_line();
     return;
-    console.log("drawing");
 
-    // console.log(width, height);
     // set size of svg
 
     // draw line
@@ -945,9 +938,8 @@ class Graph {
         return parseFloat(x.toFixed(1));
       })
     );
-    console.log(rounded_x2nofgenes);
     var d3_data = [];
-    d3.range(MIN_X_DOMAIN, MAX_X_DOMAIN, 0.1).forEach(function (x) {
+    d3.range(MIN_X_DOMAIN, MAX_X_DOMAIN + 0.1, 0.1).forEach(function (x) {
       let rounded_x = parseFloat(x.toFixed(1)),
         nofgenes = rounded_x2nofgenes[rounded_x];
       if (nofgenes == undefined) {
@@ -1001,7 +993,6 @@ class Graph {
   // }
 
   init_axes() {
-    // //////tmpconsole.logg((this.id_name, 'fdsaf')
     this.set_x();
     this.set_xAxis();
     this.set_y();
@@ -1126,7 +1117,6 @@ class Graph {
   // init vars used below
 
   set_brush() {
-    console.log("ST");
     // var self_id_name = this.id_name;
     var self = this;
     this.brush = d3
@@ -1136,20 +1126,18 @@ class Graph {
         [this.width, this.height],
       ])
       .on("brush", function (d) {
-        // console.log("event", d3.event.selection);
         // Change position of handles based on current position
         self.draw_brush_handles();
 
         // Get current range and domain selected by brush
         var current_range_selection = d3.event.selection;
+        // console.log(current_range_selection, "current_range_selection");
         // var current_range_selection = [10, 20];
-        console.log("current_range_selection", current_range_selection);
         var current_domain_selection = prepare_domain_selection(
           current_range_selection.map(self.x.invert)
         );
+        // console.log(current_domain_selection, "current_domain_selection");
         self.update_current_selection(current_domain_selection);
-
-        console.log(current_domain_selection);
 
         // If brush selects up to and incl either left or right boundary,
         // cross out text accordingly
@@ -1167,17 +1155,31 @@ class Graph {
         );
         // Select the right subset of the data corresponding to current
         // selection, and feed it to the area so it is displayed
-        var start_idx =
-            ((current_range_selection[0] - self.margin.left) /
-              (self.width - (self.margin.left + self.margin.right))) *
-            // (self.width - (self.margin.left + self.margin.right))) *
-            self.d3_data.length,
-          end_idx =
-            ((current_range_selection[1] - self.margin.left) /
-              (self.width - (self.margin.left + self.margin.right))) *
-              self.d3_data.length +
-            1;
-        console.log(self.id_name, start_idx, end_idx);
+        var start_idx = math.ceil(
+          ((current_domain_selection[0] - MIN_X_DOMAIN) /
+            (MAX_X_DOMAIN - MIN_X_DOMAIN)) *
+            (self.d3_data.length - 1)
+        );
+        var end_idx = math.floor(
+          ((current_domain_selection[1] - MIN_X_DOMAIN) /
+            (MAX_X_DOMAIN - MIN_X_DOMAIN)) *
+            (self.d3_data.length - 1) +
+            1
+        );
+        // var start_idx = math.ceil(
+        //   ((current_range_selection[0] - self.margin.left) /
+        //     (self.width - (self.margin.left + self.margin.right))) *
+        //     // (self.width - (self.margin.left + self.margin.right))) *
+        //     self.d3_data.length
+        // )
+        // ,
+        // end_idx =
+        //   math.floor(
+        //     ((current_range_selection[1] - self.margin.left) /
+        //       (self.width - (self.margin.left + self.margin.right))) *
+        //       self.d3_data.length
+        //   ) + 1
+        // ;
 
         // console.log(
         //   "corresponding x_value",
@@ -1190,31 +1192,72 @@ class Graph {
         // ) {
         //   start_idx += 1;
         // }
-        console.log("after startidx", start_idx);
         // if (self.x.invert(end_idx) > current_range_selection[1]) {
         //   end_idx -= 1;
         // }
         var selected_data = self.d3_data.slice(start_idx, end_idx);
-        console.log(
-          "selected endpoints",
-          selected_data[0],
-          selected_data[selected_data.length - 1]
-        );
+        var current_last = selected_data[selected_data.length - 1],
+          current_first = selected_data[0];
+        // assume linearity on such small interval
+        // selected_data.push({
+        //   expr: findYatXbyBisection(
+        //     current_domain_selection[1],
+        //     self.svg.select(".line"),
+        //     0
+        //   ),
+        //   x_value: current_domain_selection[1],
+        // })
+        if (
+          current_last["x_value"] < current_domain_selection[1] &&
+          current_last["x_value"] != MAX_X_DOMAIN
+        ) {
+          var next_el = self.d3_data[end_idx];
+          if (next_el != undefined) {
+            let desired_x_value = current_domain_selection[1],
+              weighted_avg_expr =
+                (current_last["expr"] * math.abs(desired_x_value % 0.1) +
+                  next_el["expr"] * 0.1 -
+                  math.abs(desired_x_value % 0.1)) /
+                0.1;
+            selected_data.push({
+              x_value: desired_x_value,
+              expr: weighted_avg_expr,
+            });
+            // console.log(
+            //   "new endpoints",
+            //   current_domain_selection,
+            //   selected_data[selected_data.length - 1]
+            // )
+          }
+        }
+        if (
+          current_first["x_value"] > current_domain_selection[0] &&
+          current_last["x_value"] > MIN_X_DOMAIN
+        ) {
+          var previous_el = self.d3_data[start_idx - 1];
+          if (previous_el != undefined) {
+            let desired_x_value = current_domain_selection[0],
+              weighted_avg_expr =
+                (current_first["expr"] *
+                  (0.1 - math.abs(desired_x_value % 0.1)) +
+                  previous_el["expr"] * math.abs(desired_x_value % 0.1)) /
+                0.1;
+            selected_data.unshift({
+              x_value: desired_x_value,
+              expr: weighted_avg_expr,
+            });
+            // console.log(
+            //   "new endpoints",
+            //   current_domain_selection[0],
+            //   selected_data[0]
+            // )
+          }
+        }
         // selected_data[0]["x_value"] = self.x.invert(current_range_selection[0]);
         // selected_data[selected_data.length - 1]["x_value"] = self.x.invert(
         //   current_range_selection[1]
         // );
         // selected_data.unshift(weighted_expr_mean(start_idx
-        console.log(
-          "selected_first",
-          selected_data[0]["x_value"],
-          self.x.invert(current_range_selection[0])
-        );
-        console.log(
-          "selected_last",
-          selected_data[selected_data.length - 1]["x_value"],
-          self.x.invert(current_range_selection[1])
-        );
         self.svg.select(".area").attr("d", self.area(selected_data));
       })
       .on("end", function () {
@@ -1361,7 +1404,6 @@ function get_intersection_idxs() {
   // combine the hpgc pgclc mask into one
   var hpgc_mask = masks["hpgc"],
     pgclc_mask = masks["pgclc"];
-  console.log("[hpgc_mask, pgclc_mask]", [hpgc_mask, pgclc_mask]);
   // if (d3.select('#pgc_operator')
   if ($("#pgc_operator").find("option:selected").attr("value") == "AND") {
     masks["hpgc-pgclc"] = [hpgc_mask, pgclc_mask].reduce(function (a, b) {
@@ -1417,7 +1459,6 @@ function update_venn() {
     ...other_db2mask,
   };
   var circle_ids = Object.keys(circle_id2mask);
-  console.log("circle_id2mask", circle_id2mask);
   var rows = [];
   var new_array_set_sizes = [];
   var combs = [[0], [1], [2], [0, 1], [0, 2], [1, 2], [0, 1, 2]];
@@ -1439,10 +1480,6 @@ function update_venn() {
     subset_name2size[set_abbrev] = subset_size;
     new_array_set_sizes.push({ sets: set_abbrev, size: subset_size });
   });
-  console.log(
-    JSON.stringify(new_array_set_sizes),
-    JSON.stringify(subset_name2size)
-  );
   // venn_div.datum(new_array_set_sizes).call(vennChart);
   // vennChart = venn.VennDiagram(subset_name2size);
   let parent_div_info = d3
@@ -1599,7 +1636,6 @@ document.addEventListener("DOMContentLoaded", () => {
     "venn",
     "info",
   ].map((n) => `display-${n}`);
-  console.log(elems);
   const removeOldClasses = () => {
     elems.forEach((elem) => graphsElem.classList.remove(elem));
   };
@@ -1616,7 +1652,6 @@ document.addEventListener("DOMContentLoaded", () => {
     Object.keys(id_name2graph).forEach(function (id_name) {
       redraw(id_name);
     });
-    // redraw("hpgc");
   });
 
   $("#pgc_operator")

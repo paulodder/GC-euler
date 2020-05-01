@@ -41,20 +41,39 @@
           Germ cell / Cancer (GC) genes or antigens entail a subset of genes
           highly expressed in cancerous tissues, but whose expression is
           normally restricted to germ cells. Under physiological conditions
-          these genes are solely ex pressed in immunologically privileged sites,
-          preventing development of tolerance by the immune system. In
-          combination with limited side effects when targeted, these features
-          render GC-genes as ideal therapeutic targets in cancer therapy.
+          these genes are solely expressed in immunologically privileged sites,
+          making such genes attractive candidates for immunotherapeutic
+          approaches. This web-app aims to facilitate identification of such
+          potentially therapeutically relevant genes.
         </p>
         <p>
-          However, identification of GC-genes (or cancer/testis (CT) genes) has
-          been based on gene expression in whole testicular tissue, rather than
-          germ cells specifically. Most likely, the relative lack of success of
-          CT-gene based therapies can be attributed to these criteria.
+          In particular, the graphs visualize the distributions of gene
+          expressions in
+          <span class="venn_statement" id_name="hpgc" id="venn_statement_hpgc"
+            >human primordial germ cells (hPGCs)</span
+          >,
+          <span id="venn_statement_pgclc" class="venn_statement" id_name="pgclc"
+            >primordial germ cell-like (PGC-like) cells</span
+          >,
+          <span id="venn_statement_gtex" class="venn_statement" id_name="gtex"
+            >healthy somatic tissues (taken from GTEx database)</span
+          >, and
+          <span id="venn_statement_tcga" class="venn_statement" id_name="tcga"
+            >cancer cells (taken from TCGA database)</span
+          >.
+        </p>
+        <p>
+          You can change the selection criteria by dragging the handles in each
+          graph, or by manually setting numerical values below each graph. Upon
+          changing the selection criteria, we re-compute the current selection,
+          i.e. the set of genes that satisfy the new criteria. The circle
+          diagram below visualizes the extent to which this current selection
+          overlaps with previous databases of CT-genes. In addition, the current
+          selection can be downloaded for further research.
         </p>
       </div>
       <div class="venn" id="venn-wrapper">
-        <div class="venn_statement_wrapper">
+        <div clanss="venn_statement_wrapper">
           <p style="font-size: 120%;">
             The
             <span id="venn_statement_current_selection"
