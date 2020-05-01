@@ -1439,11 +1439,11 @@ function get_intersection_idxs() {
 function init_other_db2mask() {
   $.getJSON(`data/CT.json`, "").done(function (data) {
     other_db2mask["CT"] = data;
-    circle_id2fancy_name["CT"] = `CT database`;
+    circle_id2fancy_name["CT"] = `CT database (n = 665)`;
   });
   $.getJSON(`data/brug2017.json`, "").done(function (data) {
     other_db2mask["brug2017"] = data;
-    circle_id2fancy_name["brug2017"] = `Bruggeman et al. 2017`;
+    circle_id2fancy_name["brug2017"] = `Bruggeman et al. 2017 (n = 652)`;
     circle_id2fancy_name["current_selection"] = "Current Selection";
   });
 }
@@ -1479,6 +1479,7 @@ function update_venn() {
     var subset_size = math.sum(all_true);
     subset_name2size[set_abbrev] = subset_size;
     new_array_set_sizes.push({ sets: set_abbrev, size: subset_size });
+    console.log(new_array_set_sizes);
   });
   // venn_div.datum(new_array_set_sizes).call(vennChart);
   // vennChart = venn.VennDiagram(subset_name2size);

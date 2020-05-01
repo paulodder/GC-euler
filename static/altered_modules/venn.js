@@ -1434,19 +1434,17 @@ centers the diagram in the available space at the same time */
       var labels = {};
       data.forEach(function (datum) {
         if (datum.label) {
-          labels[datum.sets] = datum.label;
+          labels[data.sets] = data.label;
         }
       });
-      // console.log(setAbbrevSize);
       function label(d) {
         if (d.sets in labels) {
           return labels[d.sets];
         }
         if (d.sets.length == 1) {
-          return "" + d.sets[0] + ` (n = ${d.size})`;
+          return "" + d.sets[0];
         }
         if (d.sets.length > 1) {
-          // console.log(d.sets.join(','))
           return "" + setAbbrevSize[d.sets];
         }
       }
@@ -1570,18 +1568,17 @@ centers the diagram in the available space at the same time */
         .attr("y", function (d) {
           return Math.floor(textCentres[d.sets].y);
         });
-
       if (wrap) {
         if (hasPrevious) {
           // d3 4.0 uses 'on' for events on transitions,
           // but d3 3.0 used 'each' instead. switch appropiately
           if ("on" in updateText) {
-            updateText.on("end", wrapText(circles, label));
+            updateText.on("end", wrapText(circles, label, setAbbrevSize));
           } else {
-            updateText.each("end", wrapText(circles, label));
+            updateText.each("end", wrapText(circles, label, setAbbrevSize));
           }
         } else {
-          updateText.each(wrapText(circles, label));
+          updateText.each(wrapText(circles, label, setAbbrevSize));
         }
       }
 
@@ -1693,12 +1690,16 @@ centers the diagram in the available space at the same time */
   // also worth checking out is
   // http://engineering.findthebest.com/wrapping-axis-labels-in-d3-js/
   // this seems to be one of those things that should be easy but isn't
-  function wrapText(circles, labeller) {
+  function wrapText(circles, labeller, set_abbrev2size) {
     return function () {
       var text = d3Selection.select(this),
         data = text.datum(),
         width = circles[data.sets[0]].radius || 50,
         label = labeller(data) || "";
+
+      if (label == "Current Selection") {
+        label += ` (n = ${set_abbrev2size[label]})`;
+      }
 
       var words = label.split(/\s+/).reverse(),
         maxLines = 3,
