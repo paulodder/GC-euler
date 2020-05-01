@@ -582,7 +582,7 @@ class Graph {
   set_scales() {
     // get parent size
     var size = this.get_size();
-    this.height = size[0];
+    this.height = size[0] * 0.95;
     this.width = size[1];
     this.svg.attr("width", "100%").attr("height", "100%");
 
@@ -1661,4 +1661,5 @@ document.addEventListener("DOMContentLoaded", () => {
     })
     .trigger("change");
   add_hover_venn_statement();
+  // $(window).trigger("resize");
 });
