@@ -1216,8 +1216,7 @@ class Graph {
             let desired_x_value = current_domain_selection[1],
               weighted_avg_expr =
                 (current_last["expr"] * math.abs(desired_x_value % 0.1) +
-                  next_el["expr"] * 0.1 -
-                  math.abs(desired_x_value % 0.1)) /
+                  next_el["expr"] * (0.1 - math.abs(desired_x_value % 0.1))) /
                 0.1;
             selected_data.push({
               x_value: desired_x_value,
