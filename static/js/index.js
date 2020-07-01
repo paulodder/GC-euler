@@ -1463,7 +1463,7 @@ function update_venn() {
   var circle_ids = Object.keys(circle_id2mask)
   var rows = []
   var new_array_set_sizes = []
-  var combs = [[0], [1], [2], [0, 1], [0, 2], [1, 2], [0, 1, 2]]
+  var combs = [[0, 1, 2], [0], [1], [2], [0, 1], [0, 2], [1, 2]]
   var subset_name2size = {}
   combs.forEach(function (idxs) {
     //tmpconsole.logg(idxs);
@@ -1479,9 +1479,14 @@ function update_venn() {
       })
     })
     var subset_size = math.sum(all_true)
-    subset_name2size[set_abbrev] = subset_size
+    var size_label = subset_size
+    if (idxs.length == 2) {
+      inters_size = new_array_set_sizes.filter((obj) => obj.sets.length == 3)[0]
+        .size
+      size_label -= inters_size
+    }
+    subset_name2size[set_abbrev] = size_label
     new_array_set_sizes.push({ sets: set_abbrev, size: subset_size })
-    console.log(new_array_set_sizes)
   })
   // venn_div.datum(new_array_set_sizes).call(vennChart);
   // vennChart = venn.VennDiagram(subset_name2size);
