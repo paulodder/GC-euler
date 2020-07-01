@@ -105,15 +105,18 @@
   }
 }
 
-/* body { */
-/*     height: 100vh; */
-/*     margin: 0px; */
-/* } */
+body {
+  overflow: hidden;
+  /*     height: 100vh; */
+  /*     margin: 0px; */
+}
+
 #graphs {
-  background: white;
   width: 100vw;
   height: 100vh;
-  display: none;
+  visibility: hidden;
+  background: white;
+  display: grid;
   /* @media (min-width: 500px) { */
   /*     grid-template-rows: 1fr; // all equal, but if you explicitly */
   /*   // define them you prevent the upper and lower graph to become */
@@ -127,26 +130,6 @@
   /*           "graph-3" */
   /*           "venn"; */
   /* } */
-}
-#graphs .buttons {
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  max-height: 100vh;
-  margin-right: 20px;
-}
-#graphs .button {
-  flex-grow: 1;
-  background: lightblue;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  /* @extend p; */
-  color: black;
-  cursor: pointer;
-}
-#graphs .venn {
-  border: 1px solid grey;
 }
 #graphs .graph {
   display: grid;
@@ -184,36 +167,30 @@
   /* margin: 0px; */
   /* margin-bottom: 2px; */
   /* /\* : 20%; *\/ */
+  margin: auto;
+  max-width: 90%;
   text-align: center;
   grid-area: selection_statement;
-  font-size: 80%;
+  font-size: 90%;
+  color: black;
 }
 #graphs .graph .selection_statement * {
   color: black;
-  font-size: 80%;
+  font-size: 90%;
 }
-#graphs .graph svg {
+#graphs .graph .svg_wrapper {
   grid-area: graph;
+  height: 100%;
+  width: 100%;
+  justify-content: space-around;
 }
-#graphs .graph svg .grid {
+#graphs .graph .svg_wrapper svg .grid {
   stroke: grey;
   opacity: 0.1;
   stroke-width: 0.5;
 }
-#graphs .graph svg rect.selection {
+#graphs .graph .svg_wrapper svg rect.selection {
   opacity: 0;
-}
-#graphs .graph.red {
-  background: #ff9999;
-}
-#graphs .graph.green {
-  background: #1aff1a;
-}
-#graphs .graph.yellow {
-  background: #ffff99;
-}
-#graphs .graph.purple {
-  background: #ff1aff;
 }
 #graphs .graph-0 {
   border-bottom: 2px dashed grey;
@@ -226,7 +203,6 @@
   /* display: flex; */
   /* justify-content: space-between; */
   /* flex-direction: column; */
-  text-align: center;
   background: white;
   /* svg { */
   /*     width: 100%; */
@@ -248,122 +224,39 @@
 #graphs .graph-2 {
   grid-area: graph-2;
 }
-#graphs .graph-3 {
-  grid-area: graph-3;
+#graphs .graph-3 credits {
+  grid-area: graph-3 credits;
 }
 #graphs .buttons {
   grid-area: buttons;
 }
-#graphs .info {
-  overflow-y: scroll;
+#graphs .info p {
+  margin: 3%;
 }
-@media (min-width: 500px) {
+#graphs .info h2 {
+  margin: 3%;
+}
+@media (min-width: 500px) and (max-width: 999px) {
   #graphs {
+    visibility: visible;
     display: grid;
+    overflow-y: scroll;
+    display: grid;
+    grid-template-rows: auto 50vw 25vw 25vw 25vw 25vw 3vw;
+    grid-template-columns: 100vw;
+    grid-template-areas: "info" "venn" "graph-0" "graph-1" "graph-2" "graph-3" "credits";
   }
-}
-@media (min-width: 500px) and (max-width: 799px) {
   #graphs .info {
-    display: none;
-  }
-  #graphs.display-info {
-    grid-template-columns: 3fr 10fr;
-    grid-template-areas: "buttons info";
-  }
-  #graphs.display-info .info {
-    display: initial;
+    /* overflow-y: scroll; */
   }
   #graphs .venn {
-    display: none;
-  }
-  #graphs.display-venn {
-    grid-template-columns: 3fr 10fr;
-    grid-template-areas: "buttons venn";
-  }
-  #graphs.display-venn .venn {
-    display: initial;
-  }
-  #graphs .graph-0 {
-    display: none;
-  }
-  #graphs.display-graph-0 {
-    grid-template-columns: 3fr 10fr;
-    grid-template-areas: "buttons graph-0";
-  }
-  #graphs.display-graph-0 .graph-0 {
-    display: initial;
-  }
-  #graphs .graph-1 {
-    display: none;
-  }
-  #graphs.display-graph-1 {
-    grid-template-columns: 3fr 10fr;
-    grid-template-areas: "buttons graph-1";
-  }
-  #graphs.display-graph-1 .graph-1 {
-    display: initial;
-  }
-  #graphs .graph-2 {
-    display: none;
-  }
-  #graphs.display-graph-2 {
-    grid-template-columns: 3fr 10fr;
-    grid-template-areas: "buttons graph-2";
-  }
-  #graphs.display-graph-2 .graph-2 {
-    display: initial;
-  }
-  #graphs .graph-3 {
-    display: none;
-  }
-  #graphs.display-graph-3 {
-    grid-template-columns: 3fr 10fr;
-    grid-template-areas: "buttons graph-3";
-  }
-  #graphs.display-graph-3 .graph-3 {
-    display: initial;
-  }
-}
-@media (min-width: 800px) {
-  #graphs {
-    grid-template-rows: 2fr 3fr 3fr 3fr 3fr;
-    grid-template-columns: 6fr 3fr;
-    grid-template-areas: "info info" "venn graph-0" "venn graph-1" "venn graph-2" "venn graph-3";
-  }
-  #graphs .buttons {
-    display: none;
-  }
-}
-@media (min-width: 1000px) {
-  #graphs {
-    grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
-    grid-template-columns: 8fr 9fr;
-    grid-template-areas: "info graph-0" "info graph-0" "info graph-0" "info graph-1" "venn graph-1" "venn graph-1" "venn graph-2" "venn graph-2" "venn graph-2" "venn graph-3" "venn graph-3" "venn graph-3";
-  }
-  #graphs .venn {
+    grid-area: venn;
+    border: 1px solid grey;
     display: grid;
-    grid-template-rows: 0.05fr 0.2fr 0.7fr;
+    grid-template-rows: 10fr 85fr 5fr;
     grid-template-columns: 1fr;
-    grid-template-areas: "venn_buttons" "venn_statement" "venn_svg";
+    grid-template-areas: "venn_statement" "venn_svg" "venn_buttons";
     text-align: center;
-    /* "info graph-1" */
-    /* "venn graph-1" */
-    /* "venn graph-1" */
-    /* "venn graph-2" */
-    /* "venn graph-2" */
-    /* "venn graph-2" */
-    /* "venn graph-3" */
-    /* "venn graph-3" */
-    /* "venn graph-3"; */
-    /* flex-direction: column; */
-    /* .venn-buttons { */
-    /*     display: flex; */
-    /*     /\* flex-direction: row; *\/ */
-    /*     justify-content: space-between; */
-    /*     align-items: flex-start; */
-    /*     order: -1; */
-    /* } */
-    /* grid-template-rows: 1fr; */
   }
   #graphs .venn .venn_buttons {
     grid-area: venn_buttons;
@@ -373,15 +266,55 @@
   #graphs .venn .venn_statement_wrapper {
     grid-area: venn_statement;
     max-height: 20%;
-    font-size: 80%;
+    font-size: 90%;
   }
   #graphs .venn .venn_statement_wrapper * {
-    font-size: 80%;
+    font-size: 90%;
   }
-  #graphs .venn svg {
+  #graphs .venn .venn_svg_wrapper {
     grid-area: venn_svg;
-    overflow-x: hide;
-    margin: auto;
+    display: flex;
+    justify-content: space-around;
+    height: 100%;
+    width: 100%;
+  }
+}
+@media (min-width: 1000px) {
+  #graphs {
+    visibility: visible;
+    grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 3vh;
+    grid-template-columns: 8fr 9fr;
+    grid-template-areas: "info graph-0" "info graph-0" "info graph-0" "info graph-1" "venn graph-1" "venn graph-1" "venn graph-2" "venn graph-2" "venn graph-2" "venn graph-3" "venn graph-3" "venn graph-3" "credits credits";
+  }
+  #graphs .venn {
+    border: 1px solid grey;
+    display: grid;
+    grid-template-rows: 0.05fr 0.2fr 1fr;
+    grid-template-columns: 1fr;
+    grid-template-areas: "venn_buttons" "venn_statement" "venn_svg";
+    text-align: center;
+  }
+  #graphs .venn .venn_buttons {
+    grid-area: venn_buttons;
+    display: flex;
+    justify-content: space-between;
+  }
+  #graphs .venn .venn_statement_wrapper {
+    grid-area: venn_statement;
+    max-height: 20%;
+    font-size: 90%;
+  }
+  #graphs .venn .venn_statement_wrapper * {
+    font-size: 90%;
+  }
+  #graphs .venn .venn_svg_wrapper {
+    grid-area: venn_svg;
+    display: flex;
+    justify-content: space-around;
+  }
+  #graphs .info {
+    overflow-y: scroll;
+    grid-area: info;
   }
 }
 
@@ -415,7 +348,7 @@
 }
 
 .venntooltip {
-  position: relative;
+  position: absolute;
   text-align: center;
   width: 128px;
   height: 16px;
@@ -436,5 +369,11 @@
 /*     } */
 /* } */
 /* .curre */
+footer {
+  font-size: 15;
+}
+footer * {
+  font-size: 100%;
+}
 
 /*# sourceMappingURL=graphs.css.map */
