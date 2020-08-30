@@ -6,7 +6,7 @@
  */
 
 @font-face {
-  font-family: 'Font Awesome 5 Free';
+  /* font-family: 'Font Awesome 5 Free'; */
   font-style: normal;
   font-weight: 900;
   src: url("../assets/font-awesome/fa-solid-900-e1c3f21c.eot");
@@ -14,7 +14,7 @@
 }
 
 @font-face {
-  font-family: 'Font Awesome 5 Free';
+  /* font-family: 'Font Awesome 5 Free'; */
   font-style: normal;
   font-weight: 400;
   src: url("../assets/font-awesome/fa-regular-400-3ec6adaa.eot");
@@ -22,7 +22,7 @@
 }
 
 @font-face {
-  font-family: 'Font Awesome 5 Brands';
+  /* font-family: 'Font Awesome 5 Brands'; */
   font-style: normal;
   font-weight: normal;
   src: url("../assets/font-awesome/fa-brands-400-8c9cb593.eot");
@@ -31,17 +31,17 @@
 
 .fa,
 .fas {
-  font-family: 'Font Awesome 5 Free';
+  /* font-family: 'Font Awesome 5 Free'; */
   font-weight: 900
 }
 
 .far {
-  font-family: 'Font Awesome 5 Free';
+  /* font-family: 'Font Awesome 5 Free'; */
   font-weight: 400
 }
 
 .fab {
-  font-family: 'Font Awesome 5 Brands'
+  /* font-family: 'Font Awesome 5 Brands' */
 }
 
 .fa,
@@ -5627,7 +5627,7 @@ h2,
 h3,
 h4,
 h5 {
-  font-family: "Helvetica Neue", "IBM Plex Sans", "Avenir", "Helvetica", "sans-serif";
+  /* font-family: "Helvetica Neue", "IBM Plex Sans", "Avenir", "Helvetica", "sans-serif"; */
   font-weight: 600;
   margin-top: 0;
   margin-bottom: 0.3rem
@@ -5651,7 +5651,7 @@ ol,
 li,
 span {
   margin-bottom: 0.3rem;
-  font-family: "Helvetica Neue", "IBM Plex Sans", "Avenir", "Helvetica", "sans-serif";
+  /* font-family: "Helvetica Neue", "IBM Plex Sans", "Avenir", "Helvetica", "sans-serif"; */
   font-size: 1.1rem;
   line-height: 1.5;
   letter-spacing: 0.05px;
