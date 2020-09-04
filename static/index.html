@@ -39,12 +39,15 @@
         <h2>Interactive Euler diagram</h2>
         <p>
           Germ cell / Cancer (GC) genes or antigens entail a subset of genes
-          highly expressed in cancerous tissues, but whose expression is
-          normally restricted to germ cells. Under physiological conditions
-          these genes are solely expressed in immunologically privileged sites,
-          making such genes attractive candidates for immunotherapeutic
-          approaches. This web-app aims to facilitate identification of such
-          potentially therapeutically relevant genes.
+          highly expressed in cancer, but whose expression is normally
+          restricted to germline cells. The germline includes primordial germ
+          cells, which are the embryonic precursors of germ stem cells, and only
+          exist in the early embryo. In our study, we aim to provide a selection
+          of genes that are unique to the germline and cancer. Because of the
+          restricted expression in physiological conditions, these genes are
+          attractive candidates for diagnostic and therapeutic approaches. This
+          web-app aims to facilitate identification of such potentially
+          therapeutically relevant genes.
         </p>
         <p>
           In particular, the graphs visualize the distributions of gene
@@ -65,11 +68,13 @@
         <p>
           You can change the selection criteria by dragging the handles in each
           graph, or by manually setting numerical values below each graph. Upon
-          changing the selection criteria, we re-compute the current selection,
-          i.e. the set of genes that satisfy the new criteria. The circle
-          diagram below visualizes the extent to which this current selection
-          overlaps with previous databases of CT-genes. In addition, the current
-          selection can be downloaded for further research.
+          changing the selection criteria, the set of genes that satisfy the new
+          criteria is re-computed. The Venn diagram below visualizes the extent
+          to which this current selection overlaps with previous studies that
+          attempted to obtain similar selections with adult germ cells
+          (Bruggeman et al. 2018) and whole testis tissue (Almeida et al. 2009 &
+          Wang et al. 2016). The altered selection can be downloaded for further
+          research.
         </p>
       </div>
       <div class="venn" id="venn-wrapper">

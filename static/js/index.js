@@ -1441,11 +1441,11 @@ function init_other_db2mask() {
     other_db2mask['CT'] = data
     circle_id2fancy_name[
       'CT'
-    ] = `Wang et al. 2006 & Almeida et al. 2009 (n = 1128)`
+    ] = `Almeida et al. 2009 & Wang et al. 2016 (n = 1128)`
   })
   $.getJSON(`data/brug2017.json`, '').done(function (data) {
     other_db2mask['brug2017'] = data
-    circle_id2fancy_name['brug2017'] = `Bruggeman et al. 2017 (n = 756)`
+    circle_id2fancy_name['brug2017'] = `Bruggeman et al. 2018 (n = 756)`
     circle_id2fancy_name['current_selection'] = 'Current Selection'
   })
 }
@@ -1460,7 +1460,9 @@ function update_venn() {
     ...{ current_selection: inters_idxs },
     ...other_db2mask,
   }
-  var circle_ids = Object.keys(circle_id2mask)
+  var circle_ids = ['current_selection', 'CT', 'brug2017']
+  Object.keys(circle_id2mask)
+  console.log(circle_ids)
   var rows = []
   var new_array_set_sizes = []
   var combs = [[0, 1, 2], [0], [1], [2], [0, 1], [0, 2], [1, 2]]
@@ -1479,11 +1481,35 @@ function update_venn() {
       })
     })
     var subset_size = math.sum(all_true)
+
+    // some hardcoded offsets to make up for genes that are not used in the
+    // dataset giving rise to these figures, but should be taken into account
+    // because they do occur in both of the other datasets
+    if (idxs.length == 2) {
+      const these_circle_ids = [first_circle_id, circle_ids[idxs[1]]]
+      if (
+        these_circle_ids.includes('CT') &&
+        these_circle_ids.includes('brug2017')
+      ) {
+        console.log('HERE')
+        subset_size = 9 + subset_size
+      }
+    }
     var size_label = subset_size
+
     if (idxs.length == 2) {
       inters_size = new_array_set_sizes.filter((obj) => obj.sets.length == 3)[0]
         .size
       size_label -= inters_size
+
+      /* var these_circle_ids =
+       * if (.contains( == 'CT' ) */
+    } else if (idxs.length == 1) {
+      if (first_circle_id == 'CT') {
+        subset_size += 463
+      } else if (first_circle_id == 'brug2017') {
+        subset_size += 104
+      }
     }
     subset_name2size[set_abbrev] = size_label
     new_array_set_sizes.push({ sets: set_abbrev, size: subset_size })
