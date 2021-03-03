@@ -1,0 +1,33 @@
+#+BIND: org-export-use-babel nil
+#+TITLE: README
+#+AUTHOR: Paul Lodder
+#+EMAIL: <paul_lodder@live.nl>
+#+DATE: March 3, 2021
+#+LATEX: \setlength\parindent{0pt}
+#+LaTeX_HEADER: \usepackage{minted}
+#+LATEX_HEADER: \usepackage[margin=0.8in]{geometry}
+#+LATEX_HEADER_EXTRA:  \usepackage{mdframed}
+#+LATEX_HEADER_EXTRA: \BeforeBeginEnvironment{minted}{\begin{mdframed}}
+#+LATEX_HEADER_EXTRA: \AfterEndEnvironment{minted}{\end{mdframed}}
+#+MACRO: NEWLINE @@latex:\\@@ @@html:<br>@@
+#+PROPERTY: header-args :exports both :session README :cache :results value :product postgres
+#+OPTIONS: ^:nil
+#+SETUPFILE: https://fniessen.github.io/org-html-themes/org/theme-readtheorg.setup
+#+LATEX_COMPILER: pdflatex
+* Setting up
+Install the dependencies in =package.json=.
+
+Download the data.zip from https://lodder.dev/misc/data.zip, unzip the content
+into =static/data=:
+#+BEGIN_SRC sh
+mkdir static/data
+curl https://lodder.dev/misc/data.zip > data.zip
+unzip data.zip -d static/data
+#+END_SRC
+
+Now to run the app, run:
+#+BEGIN_SRC sh
+nodejs app.js
+#+END_SRC
+By default it will host it on port 5000, but you can change this behavior by
+changing the =5000= value in the =app.js= file.
